@@ -1,23 +1,27 @@
 <template>
   <div class="defuse">
-  <div class="row" v-for="row,idx in map">
-    <div class="field" v-for="field in row" @click="open">
-        <span v-if="field.isBomb">    💣</span>
+    <div class="row" v-for="row,idx in map">
+      <m-field
+        v-for="field in row" :field="field" :key="`${field.x},${field.y}`"
+        @click.native="open(field)"
+      ></m-field>
     </div>
-  </div>
+    <input placeholder="x" type="text" v-model="addBombX"/>
+    <input placeholder="y" type="text" v-model="addBombY"/>
+    <button type="button" @click="addBomb(addBombX, addBombY)">Add Bomb</button>
   </div>
 </template>
 
 <script>
-
-function Field (x, y) {
+import Vue from 'vue'
+import MField from './Field'
+function Field (x, y, hasBomb = false) {
   this.x = x
   this.y = y
   this.isOpen = false
-  this.isBomb = false
+  this.hasBomb = hasBomb
   this.isMarked = false
 }
-
 export default {
   name: 'Defuse',
   data () {
@@ -26,7 +30,9 @@ export default {
       dimY: 10,
       map: null,
       numberOfBombs: null,
-      remainingBombs: null
+      remainingBombs: null,
+      addBombX: null,
+      addBombY: null
     }
   },
   mounted () {
@@ -47,33 +53,44 @@ export default {
     },
 
     placeBombs () {
-      this.map[1][1].isBomb = true
+      this.map[1][1].hasBomb = true
     },
 
-    open () {
-      console.log(arguments)
-      //
+    addBomb (x, y) {
+      Vue.set(this.map[x][y], 'hasBomb', true)
+    },
+
+    open (field) {
+      // Vue.set(field, 'isOpen', true)
+      Vue.set(this.map[field.x][field.y], 'isOpen', true)
+
+      console.log(field)
+      if (field.hasBomb) {
+        this.endGame()
+      }
+    },
+
+    endGame () {
+      alert('boom')
     }
+  },
+  components: {
+    MField
   }
 }
 </script>
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
-<style scoped>
-:root {
-  --fieldwidth: 20px;
-}
+<style>
+  :root {
+    --fieldwidth: 20px;
+  }
 
-.field {
-  // height: var(--fieldwidth);
-  // width: var(--fieldwidth);
-  height: 20px;
-  width: 20px;
-  background-color: #ddd;
-  margin: 1px;
-}
 
-.row {
-  display: flex;
-}
+
+  .row {
+    display: flex;
+  }
+
+
 </style>

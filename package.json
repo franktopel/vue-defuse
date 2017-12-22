@@ -1,7 +1,7 @@
 {
   "name": "defuse",
   "version": "1.0.0",
-  "description": "A minesweeper implenation in vue.js",
+  "description": "A minesweeper implentation in vue.js",
   "author": "FT & jeb",
   "private": true,
   "scripts": {
