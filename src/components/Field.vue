@@ -1,16 +1,11 @@
 <template>
-  <div class="field" :class="{ 'has-bomb': hasBomb, 'is-open': isOpen, 'is-marked': isMarked }"></div>
+  <div class="field" :class="{ 'has-bomb': field.hasBomb, 'is-open': field.isOpen, 'is-marked': field.isMarked }"></div>
 </template>
 
 <script>
   export default {
     name: 'MField',
-    props: { field: Object },
-    data () {
-      return {
-        ...this.field
-      }
-    }
+    props: { field: Object }
   }
 </script>
 
