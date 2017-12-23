@@ -1,7 +1,7 @@
 module.exports = {
   eventType: 'auto',
   width: 6,
-  height: '90vh',
+  height: 'calc(100vh - 100px)',
   dotSize: 24,
   dotHeight: null,
   dotWidth: null,

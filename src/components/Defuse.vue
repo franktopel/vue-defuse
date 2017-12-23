@@ -142,6 +142,6 @@ export default {
   .vue-slider-horizontal {
     left: 180px;
     position: absolute;
-    top: 0;
+    top: 40px;
   }
 </style>
