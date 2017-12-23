@@ -15,7 +15,10 @@
     <div class="row" v-for="row, index in map">
       <div class="field">{{ index }}</div>
       <m-field
-        v-for="field in row" :field="field" :key="`${field.x},${field.y}`"
+        v-for="field in row"
+        :field="field"
+        :key="`${field.x},${field.y}`"
+        :class="{ 'is-highlighted': field.x == addBombX && field.y == addBombY }"
         @click.native="open(field)"
       ></m-field>
     </div>
