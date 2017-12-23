@@ -11,10 +11,14 @@
 
 <style>
   .field {
+    align-items: center;
     background-color: #ddd;
-    height: 20px;
-    margin: 1px;
-    width: 20px;
+    display: flex;
+    height: 40px;
+    justify-content: center;
+    margin: 1px 1px 0 0;
+    text-align: center;
+    width: 40px;
   }
 
   .has-bomb::after {

@@ -1,27 +1,43 @@
 <template>
   <div class="defuse">
-    <div class="row" v-for="row,idx in map">
+    <vue-slider
+      v-model="dimX"
+      v-bind="sliderOptions"
+    ></vue-slider>
+    <vue-slider
+      v-model="dimY"
+      v-bind="verticalSliderOptions"
+    ></vue-slider>
+    <div class="row">
+      <div class="field"></div>
+      <div class="field" v-for="n in X">{{ n - 1 }}</div>
+    </div>
+    <div class="row" v-for="row, index in map">
+      <div class="field">{{ index }}</div>
       <m-field
         v-for="field in row" :field="field" :key="`${field.x},${field.y}`"
         @click.native="open(field)"
       ></m-field>
     </div>
-    <input placeholder="x" type="text" v-model="addBombX"/>
-    <input placeholder="y" type="text" v-model="addBombY"/>
-    <button type="button" @click="addBomb(addBombX, addBombY)">Add Bomb</button>
+    <br />
+
+    <br />
+    <br />
+    <br />
+    <input placeholder="x" type="number" :max="X-1" v-model="addBombX"/>
+    <input placeholder="y" type="number" :max="Y-1" v-model="addBombY"/>
+    <button type="button" @click="addBomb(parseInt(addBombX-1), parseInt(addBombY-1))">Add Bomb</button>
   </div>
 </template>
 
 <script>
-import Vue from 'vue'
 import MField from './Field'
-function Field (x, y, hasBomb = false) {
-  this.x = x
-  this.y = y
-  this.isOpen = false
-  this.hasBomb = hasBomb
-  this.isMarked = false
-}
+import VueSlider from 'vue-slider-component'
+var sliderOptions = require('../helper/sliderOptions')
+var verticalSliderOptions = require('../helper/verticalSliderOptions')
+
+const Field = require('../helper/Field')
+
 export default {
   name: 'Defuse',
   data () {
@@ -32,19 +48,37 @@ export default {
       numberOfBombs: null,
       remainingBombs: null,
       addBombX: null,
-      addBombY: null
+      addBombY: null,
+      sliderOptions,
+      verticalSliderOptions
     }
   },
-  mounted () {
+  computed: {
+    X () {
+      return parseInt(this.dimX)
+    },
+    Y () {
+      return parseInt(this.dimY)
+    }
+  },
+  watch: {
+    dimX: function (newVal, oldVal) {
+      this.clearMap()
+    },
+    dimY: function () {
+      this.clearMap()
+    }
+  },
+  created () {
     this.clearMap()
     this.placeBombs()
   },
   methods: {
     clearMap () {
       this.map = []
-      for (let y = 0; y < this.dimY; y++) {
+      for (let y = 0; y < this.Y; y++) {
         let row = []
-        for (let x = 0; x < this.dimX; x++) {
+        for (let x = 0; x < this.X; x++) {
           let field = new Field(x, y)
           row.push(field)
         }
@@ -57,14 +91,11 @@ export default {
     },
 
     addBomb (x, y) {
-      Vue.set(this.map[x][y], 'hasBomb', true)
+      this.map[x][y].hasBomb = true
     },
 
     open (field) {
-      // Vue.set(field, 'isOpen', true)
-      Vue.set(this.map[field.x][field.y], 'isOpen', true)
-
-      console.log(field)
+      field.isOpen = true
       if (field.hasBomb) {
         this.endGame()
       }
@@ -75,22 +106,39 @@ export default {
     }
   },
   components: {
-    MField
+    MField,
+    VueSlider
   }
 }
 </script>
 
-<!-- Add "scoped" attribute to limit CSS to this component only -->
-<style>
+<style lang="scss">
   :root {
     --fieldwidth: 20px;
   }
 
+  .defuse {
+    padding: 80px 0 0 80px;
+    position: relative;
+  }
 
+  input, button {
+    font-size: 16px;
+    padding: 1em;
+  }
 
   .row {
     display: flex;
   }
 
+  .vue-slider-vertical-reverse {
+    left: 0;
+    position: absolute;
+  }
 
+  .vue-slider-horizontal {
+    left: 180px;
+    position: absolute;
+    top: 0;
+  }
 </style>
