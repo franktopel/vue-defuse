@@ -10,15 +10,15 @@
     ></vue-slider>
     <div class="row">
       <div class="field"></div>
-      <div class="field" v-for="n in X">{{ n - 1 }}</div>
+      <div class="field" v-for="n in X">{{ n }}</div>
     </div>
     <div class="row" v-for="row, index in map">
-      <div class="field">{{ index }}</div>
+      <div class="field">{{ index + 1 }}</div>
       <m-field
         v-for="field in row"
         :field="field"
         :key="`${field.x},${field.y}`"
-        :class="{ 'is-highlighted': field.x == addBombX && field.y == addBombY }"
+        :class="{ 'is-highlighted': field.x == addBombX - 1 && field.y == addBombY - 1 }"
         @click.native="open(field)"
       ></m-field>
     </div>
@@ -27,8 +27,8 @@
     <br />
     <br />
     <br />
-    <input placeholder="x" type="number" :max="X-1" v-model="addBombX"/>
-    <input placeholder="y" type="number" :max="Y-1" v-model="addBombY"/>
+    <input placeholder="x" type="number" min="1" :max="X-1" v-model="addBombX"/>
+    <input placeholder="y" type="number" min="1" :max="Y-1" v-model="addBombY"/>
     <button type="button" @click="addBomb(parseInt(addBombX-1), parseInt(addBombY-1))">Add Bomb</button>
   </div>
 </template>
