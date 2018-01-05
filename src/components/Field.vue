@@ -1,5 +1,11 @@
 <template>
-  <div class="field" :class="{ 'has-bomb': field.hasBomb, 'is-open': field.isOpen, 'is-marked': field.isMarked }"></div>
+  <div
+    class="field"
+    :class="{
+      'has-bomb': field.hasBomb,
+      'is-open': field.isOpen,
+      'is-marked': field.isMarked
+    }"></div>
 </template>
 
 <script>
