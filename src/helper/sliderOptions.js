@@ -1,6 +1,6 @@
 module.exports = {
   eventType: 'auto',
-  width: 1580,
+  width: 'calc(100vw - 100px)',
   height: 6,
   dotSize: 24,
   dotHeight: null,

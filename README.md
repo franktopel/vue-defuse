@@ -1,6 +1,8 @@
 # defuse
 
-> A minesweeper implenation in vue.js
+> A minesweeper implentation in vue.js
+
+Demo: http://connexo.de/defuse/
 
 ## Build Setup
 
