@@ -4,6 +4,7 @@ let Field = function (x, y) {
   this.isOpen = false
   this.hasBomb = false
   this.isMarked = false
+  this.numNeighbourBombs = null
 }
 
 module.exports = Field

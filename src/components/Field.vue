@@ -2,10 +2,10 @@
   <div
     class="field"
     :class="{
-      'has-bomb': field.hasBomb,
+      'has-bomb': field.hasBomb && field.isOpen,
       'is-open': field.isOpen,
       'is-marked': field.isMarked
-    }"></div>
+    }">{{field.numNeighbourBombs ? field.numNeighbourBombs : null}}</div>
 </template>
 
 <script>
@@ -16,32 +16,53 @@
 </script>
 
 <style lang="scss">
+  :root {
+    --fieldwidth: 60px;
+    --iconsize: calc(var(--fieldwidth) / 3 * 2);
+  }
+
   .field {
     align-items: center;
     background-color: #ddd;
+    border: 1px solid #aaa;
     display: flex;
-    height: 40px;
+    height: var(--fieldwidth);
     justify-content: center;
-    margin: 1px 1px 0 0;
+    margin: 0;
     text-align: center;
-    transition: all .4s ease;
-    width: 40px;
+    transition: all .1s linear;
+    width: var(--fieldwidth);
   }
 
   .has-bomb {
+    font-size: var(--iconsize);
+    line-height: var(--fieldwidth);
     &::after {
       content: "💣";
+      position: relative;
+      top: 6%;
     }
   }
 
   .is-open {
-    background-color: #666;
+    background-color: #fff;
+  }
+
+  .is-marked {
+    font-size: var(--iconsize);
+    line-height: var(--fieldwidth);
+    &::after {
+      content: "🚩";
+      position: relative;
+      top: 6%;
+    }
   }
 
   .is-highlighted,
   .field:hover {
-    box-shadow: 0 0 10px #a00;
-    transform: scale(1.1);
+    background-color: #f0f0f0;
+    box-shadow: 0 0 2px #333;
+    transform: scale(1.15);
     z-index: 5;
   }
 </style>
