@@ -17,8 +17,9 @@
           v-for="field in row"
           :field="field"
           :key="`${field.x},${field.y}`"
-          @click.native="open(field)"
-          @longtap="toggleBombMarker(field)"
+          @click.native.prevent="open(field)"
+          @click.right.native.prevent="toggleBombMarker(field, $event)"
+          @longtap="longtap(field)"
         ></m-field>
       </div>
       <div class="playfield-overlay">
@@ -124,7 +125,10 @@ export default {
       }
     },
 
-    toggleBombMarker (field) {
+    toggleBombMarker (field, event) {
+      if (event && event.sourceCapabilities.firesTouchEvents) {
+        return
+      }
       this.startTimer()
       if (field.isOpen) {
         return
@@ -235,6 +239,14 @@ export default {
       clearInterval(this.timer)
       this.timer = null
     },
+
+    longtap (field, event) {
+      this.toggleBombMarker(field, event)
+    },
+
+    log (val) {
+      console.log(val)
+    }
   },
   components: {
     MField

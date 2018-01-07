@@ -17,8 +17,9 @@
     props: { field: Object, longtap: Function },
     methods: {
       emitLongtap (field) {
-        return () => {
-          this.$emit('longtap', field)
+        return (event) => {
+          event.preventDefault()
+          this.$emit('longtap', field, event)
         }
       }
     }
