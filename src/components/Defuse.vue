@@ -1,7 +1,7 @@
 <template>
   <div class="defuse"
        @click.right.prevent>
-    <h2 class="game-title">Defuse!</h2>
+    <h2 class="game-title">Defuse! <button type="button" class="defuse-settings" @click="toggleSettings">⚙</button></h2>
     <div class="game-state">
       <span class="bomb-mark-count"
             :data-bomb-mark-count="remainingBombsCount"></span>
@@ -10,7 +10,7 @@
       >{{ winLoseSymbol }}</span>
       <span class="timer">⌛ {{ timePassed | formatTimer }}</span>
     </div>
-    <div class="playfield" :class="{ 'game-over': gamestate === 'lost' || gamestate === 'won' }">
+    <div class="playfield" :class="{ 'game-over': gamestate === 'lost' || gamestate === 'won', 'defuse-settings': showSettings }">
       <div class="row"
            v-for="row, index in map">
         <m-field
@@ -22,11 +22,31 @@
           @longtap="longtap(field)"
         ></m-field>
       </div>
-      <div class="playfield-overlay">
+      <div class="playfield-overlay game-over">
         <div class="inner">
-          <h3>GAME OVER!</h3>
+          <h3>{{ message(`gamestate.${gamestate}`) }}</h3>
           <h4>{{ winLoseSymbol }}</h4>
           <button type="button" @click="buildMap">{{ gamestate === 'lost' ? 'Try again' : 'Restart' }}</button>
+        </div>
+      </div>
+      <div class="playfield-overlay defuse-settings" id="defuse-settings" >
+        <div class="language-switch">
+          <button type="button" v-for="lang in languages" :class="{ 'active-language': language === lang }" @click="language = lang">{{ lang }}</button>
+        </div>
+        <button class="close" @click="showSettings = false">✖</button>
+        <div class="inner">
+          <label>{{ message('settings.label.playfieldWidth') }}
+            <input type="number" min="1" :max="100" step="1" v-model="setX" :placeholder="message('settings.label.playfieldWidth')"/>
+          </label>
+          <label>{{ message('settings.label.playfieldHeight') }}
+            <input type="number" min="1" :max="100" step="1" v-model="setY" :placeholder="message('settings.label.playfieldHeight')"/>
+          </label>
+          <label>{{ message('settings.label.bombCount') }}
+            <input type="number" min="0" :max="X * Y" step="1" v-model="setBombCount" :placeholder="message('settings.label.bombCount')"/>
+          </label>
+          <label>{{ message('settings.label.fieldSize') }}
+            <input type="number" min="20" max="60" step="1" v-model="setFieldWidth" :placeholder="message('settings.label.fieldSize')"/>
+          </label>
         </div>
       </div>
     </div>
@@ -35,7 +55,7 @@
 
 <script>
 import MField from './Field'
-
+const messages = require('../i18n/translations.json')
 const Field = require('../helper/Field')
 
 export default {
@@ -66,45 +86,91 @@ export default {
       winLoseSymbol: '',
       timePassed: 0,
       timer: null,
-      gamestate: undefined
+      gamestate: undefined,
+      showSettings: false,
+      setX: this.X * 1,
+      setY: this.Y * 1,
+      setBombCount: this.numberOfBombs * 1,
+      setFieldWidth: this.fieldWidth * 1,
+      messages,
+      language: 'en',
     }
   },
   watch: {
     X: function (newVal, oldVal) {
+      this.setX = newVal
       this.buildMap()
     },
 
-    Y: function () {
+    Y: function (newVal, oldVal) {
+      this.setY = newVal
       this.buildMap()
+    },
+
+    setX: function (newVal, oldVal) {
+      this.buildMap()
+    },
+
+    setY: function () {
+      this.buildMap()
+    },
+
+    setBombCount: function (newVal, oldVal) {
+      this.buildMap()
+    },
+
+    setFieldWidth: function (newVal) {
+      document.querySelector(':root').style.setProperty('--fieldwidth', `${newVal}px`)
     },
 
     numberOfBombs: function () {
+      this.setBombCount = null
       this.buildMap()
     },
 
     fieldWidth: function (newVal, oldVal) {
+      this.setFieldWidth = null
       document.querySelector(':root').style.setProperty('--fieldwidth', `${newVal}px`)
     }
   },
   created () {
     this.buildMap()
-    document.querySelector(':root').style.setProperty('--fieldwidth', `${this.fieldWidth}px`)
+    document.querySelector(':root').style.setProperty('--fieldwidth', `${this.setFieldWidth ? this.setFieldWidth : this.fieldWidth}px`)
   },
   computed: {
     remainingBombsCount () {
       return this.numberOfBombsValidated - this.bombsMarkedCount
     },
     numberOfBombsValidated () {
-      return Math.min((this.X * this.Y), this.numberOfBombs)
+      return Math.min((this.getX * this.getY), this.getBombCount ? parseInt(this.getBombCount) : this.numberOfBombs)
+    },
+    getX () {
+      return this.setX ? parseInt(this.setX) : this.X
+    },
+    getY () {
+      return this.setY ? parseInt(this.setY) : this.Y
+    },
+    getBombCount () {
+      return this.setBombCount ? parseInt(this.setBombCount) : this.numberOfBombs
+    },
+    languages () {
+      return Object.keys(this.messages)
     }
   },
   filters: {
     formatTimer (seconds) {
-      if (seconds.toString().length < 4) {
-        return ('0000' + seconds).substr(-4)
-      } else {
-        return seconds
-      }
+      let mins, secs, hrs, remainingSecs
+      hrs = ('0' + Math.floor(seconds / 3600)).substr(-2)
+      remainingSecs = seconds - hrs * 3600
+      mins = ('0' + Math.floor(remainingSecs / 60)).substr(-2)
+      secs = ('0' + remainingSecs % 60).substr(-2)
+      return `${hrs}:${mins}:${secs}`
+      // use this if all you wanna see is seconds filled up with zeros
+      // if (seconds.toString().length < 4) {
+      //   return ('0000' + seconds).substr(-4)
+      // } else {
+      //   return seconds
+      // }
     }
   },
   methods: {
@@ -112,12 +178,12 @@ export default {
       this.timePassed = 0
       this.stopTimer()
       this.winLoseSymbol = '😃'
-      this.closedFieldCount = this.X * this.Y
+      this.closedFieldCount = this.getX * this.getY
       this.bombsMarkedCount = 0
       this.map = []
-      for (let y = 0; y < this.Y; y++) {
+      for (let y = 0; y < this.getY; y++) {
         let row = []
-        for (let x = 0; x < this.X; x++) {
+        for (let x = 0; x < this.getX; x++) {
           let field = new Field(x, y)
           row.push(field)
         }
@@ -149,8 +215,8 @@ export default {
 
     placeBombs () {
       let freeFields = []
-      for (let y = 0; y < this.Y; y++) {
-        for (let x = 0; x < this.X; x++) {
+      for (let y = 0; y < this.getY; y++) {
+        for (let x = 0; x < this.getX; x++) {
           freeFields.push({x, y})
         }
       }
@@ -183,12 +249,11 @@ export default {
           }
         })
 
-        // showNumber
         this.map[field.y][field.x].numNeighbourBombs = numNeighbourBombs
         if (numNeighbourBombs === 0) {
           neighbourFields.forEach(neighField => {
             if (!neighField.isOpen && !neighField.isMarked) {
-              window.setTimeout(() => { this.open(neighField) }, Math.floor(Math.random() * 300))
+              window.setTimeout(() => { this.open(neighField) }, Math.floor(Math.random() * (30000 / (this.getX * this.getY))))
             }
           })
         }
@@ -201,9 +266,9 @@ export default {
     getNeighbours (field) {
       let list = []
       let minX = Math.max(0, field.x - 1)
-      let maxX = Math.min(this.X - 1, field.x + 1)
+      let maxX = Math.min(this.getX - 1, field.x + 1)
       let minY = Math.max(0, field.y - 1)
-      let maxY = Math.min(this.Y - 1, field.y + 1)
+      let maxY = Math.min(this.getY - 1, field.y + 1)
       for (let x = minX; x <= maxX; x++) {
         for (let y = minY; y <= maxY; y++) {
           if (x !== field.x || y !== field.y) {
@@ -244,9 +309,17 @@ export default {
       this.toggleBombMarker(field, event)
     },
 
-    log (val) {
-      console.log(val)
-    }
+    toggleSettings () {
+      this.showSettings = !this.showSettings
+    },
+
+    message (key) {
+      let message = messages[this.language]
+      key.split('.').forEach(function (keypart) {
+        message = message.hasOwnProperty(keypart) ? message[keypart] : undefined
+      })
+      return message || key
+    },
   },
   components: {
     MField
@@ -267,8 +340,23 @@ export default {
     background-color: #333;
     color: #fff;
     font-size: 2em;
-    text-align: center;
+    padding: 0 1em;
     margin: 0 -.15em;
+    position: relative;
+    text-align: center;
+    button {
+      border: 0;
+      bottom: 0;
+      background-color: transparent;
+      outline: none;
+      position: absolute;
+      right: 0;
+      top: 0;
+      transition: all .4s ease;
+      &:hover {
+        transform: scale(2);
+      }
+    }
   }
 
   .row {
@@ -278,7 +366,7 @@ export default {
     display: flex;
     flex-direction: row;
     justify-content: space-between;
-    padding: 0.6em;
+    padding: .4em 0;
     > * {
       background-color: #fff;
       display: flex;
@@ -286,7 +374,8 @@ export default {
       font-size: 2em;
       justify-content: center;
       text-align: center;
-      width: 30%;
+      white-space: nowrap;
+      width: 32.5%;
     }
   }
 
@@ -301,6 +390,7 @@ export default {
   }
 
   .playfield {
+    min-height: 378px;
     position: relative;
     -webkit-touch-callout: none;
     -webkit-user-select: none;
@@ -313,7 +403,7 @@ export default {
 
   .playfield.game-over {
     z-index: 1000;
-    .playfield-overlay {
+    .playfield-overlay.game-over {
       color: #fff;
       text-align: center;
       transform: scale(1);
@@ -337,9 +427,52 @@ export default {
         button {
           appearance: none;
           background-color: #fff;
-          padding: 0.5em 2em;
+          padding: .5em 2em;
         }
       }
+    }
+  }
+  .playfield.defuse-settings {
+    z-index: 1000;
+    .playfield-overlay.defuse-settings {
+      color: #fff;
+      text-align: center;
+      transform: scale(1);
+      transition-duration: .5s;
+      z-index: 9999;
+      .inner {
+        left: 0;
+        opacity: .95;
+        position: absolute;
+        padding: 2em 1em 1em;
+        top: 2em;
+      }
+      label {
+        input {
+          display: block;
+          margin-bottom: 1em;
+          min-width: 120px;
+          text-align: center;
+        }
+      }
+      .close {
+        appearance: none;
+        background-color: transparent;
+        border: 0;
+        color: #fff;
+        cursor: pointer;
+        font-size: 2em;
+        outline: 0;
+        position: absolute;
+        right: 0;
+        top: 0;
+      }
+    }
+  }
+
+  .playfield.game-over.defuse-settings {
+    .playfield-overlay.game-over {
+      display: none;
     }
   }
 
@@ -360,7 +493,35 @@ export default {
 
   .timer {
     border: 1px solid #ddd;
+    font-size: 1.5em;
     flex-basis: 1;
+  }
+
+  .language-switch {
+    position: absolute;
+    top: .4em;
+    left: 1em;
+    line-height: 1.5em;
+    vertical-align: baseline;
+    button {
+      appearance: none;
+      background-color: transparent;
+      border: 0;
+      color: #fff;
+      cursor: pointer;
+      padding: 0;
+      margin-right: .4em;
+      outline: none;
+      transform-origin: center 70%;
+      transition: all .1s linear;
+      &::last-of-type() {
+        margin-right: 0;
+      }
+      &.active-language {
+        font-weight: bold;
+        transform: scale(1.3)
+      }
+    }
   }
 
 

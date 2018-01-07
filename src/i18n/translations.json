@@ -1,0 +1,32 @@
+{
+  "de": {
+    "gamestate": {
+      "won": "Gewonnen!",
+      "lost": "Leider verloren!",
+      "retry": "Nochmal versuchen"
+    },
+    "settings": {
+      "label": {
+        "playfieldWidth": "Spielfeldbreite",
+        "playfieldHeight": "Spielfeldhöhe",
+        "fieldSize": "Feldbreite (px)",
+        "bombCount": "Anzahl der Bomben"
+      }
+    }
+  },
+  "en": {
+    "gamestate": {
+      "won": "You won!",
+      "lost": "Game over!",
+      "retry": "Retry"
+    },
+    "settings": {
+      "label": {
+        "playfieldWidth": "Playfield width",
+        "playfieldHeight": "Playfield height",
+        "fieldSize": "Field width (px)",
+        "bombCount": "Number of bombs"
+      }
+    }
+  }
+}
