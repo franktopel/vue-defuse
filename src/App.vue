@@ -42,7 +42,7 @@ export default {
     return {
       dimX: 10,
       dimY: 10,
-      fieldWidth: 40,
+      fieldWidth: 60,
       numberOfBombs: 10,
       sliderOptions,
       verticalSliderOptions,
