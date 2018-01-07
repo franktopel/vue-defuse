@@ -8,13 +8,13 @@
       v-model="dimY"
       v-bind="verticalSliderOptions"
     ></vue-slider>
-    <p class="fieldwidth">Feldbreite:
+    <p class="fieldwidth">Width/height of a single field:
       <vue-slider
         v-model="fieldWidth"
         v-bind="Object.assign({}, sliderOptions, { width: 290, class: 'slider-small', min: 20, max: 100 })">
       </vue-slider>
     </p>
-    <p class="fieldwidth">Anzahl Minen:
+    <p class="fieldwidth">Number of bombs:
       <vue-slider
         v-model="numberOfBombs"
         v-bind="Object.assign({}, sliderOptions, { width: 290, class: 'slider-small', min: 0, max: dimY * dimX })">
