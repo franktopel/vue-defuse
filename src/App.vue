@@ -1,5 +1,5 @@
 <template>
-  <div id="app">
+  <div id="defuse">
     <vue-slider
       v-model="dimX"
       v-bind="sliderOptions"
@@ -35,7 +35,7 @@ var sliderOptions = require('./helper/sliderOptions')
 var verticalSliderOptions = require('./helper/verticalSliderOptions')
 
 export default {
-  name: 'app',
+  name: 'defuse',
   data () {
     return {
       dimX: 10,
@@ -63,7 +63,7 @@ export default {
 </script>
 
 <style lang="scss">
-  #app {
+  #defuse {
     font-family: 'Avenir', Helvetica, Arial, sans-serif;
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
