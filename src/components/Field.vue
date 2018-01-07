@@ -59,7 +59,7 @@
   }
 
   .is-highlighted,
-  .field:hover {
+  .field:not(.is-open):hover {
     background-color: #f0f0f0;
     box-shadow: 0 0 2px #333;
     transform: scale(1.15);
