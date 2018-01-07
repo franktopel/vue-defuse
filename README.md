@@ -5,7 +5,7 @@
 Demo: http://connexo.de/defuse/
 
 Screenshot: 
-![Defuse game](screenshot_defuse.png)
+![Defuse game](screenshot.png)
 
 
 ## Build Setup
