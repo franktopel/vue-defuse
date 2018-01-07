@@ -31,7 +31,7 @@
       </div>
       <div class="playfield-overlay defuse-settings" id="defuse-settings" >
         <div class="language-switch">
-          <button type="button" v-for="lang in languages" :class="{ 'active-language': language === lang }" @click="language = lang">{{ lang }}</button>
+          <button type="button" v-for="lang in languages" :class="{ 'active-language': language === lang }" @click="setLanguage(lang)">{{ lang }}</button>
         </div>
         <button class="close" @click="showSettings = false">✖</button>
         <div class="inner">
@@ -57,6 +57,7 @@
 import MField from './Field'
 const messages = require('../i18n/translations.json')
 const Field = require('../helper/Field')
+var userLang = localStorage.getItem('defuse-language') || navigator.language || navigator.userLanguage
 
 export default {
   name: 'Defuse',
@@ -93,7 +94,7 @@ export default {
       setBombCount: this.numberOfBombs * 1,
       setFieldWidth: this.fieldWidth * 1,
       messages,
-      language: 'en',
+      language: userLang,
     }
   },
   watch: {
@@ -319,6 +320,13 @@ export default {
         message = message.hasOwnProperty(keypart) ? message[keypart] : undefined
       })
       return message || key
+    },
+
+    setLanguage (lang) {
+      if (this.languages.indexOf(lang) > -1) {
+        localStorage.setItem('defuse-language', lang)
+        this.language = lang
+      }
     },
   },
   components: {
