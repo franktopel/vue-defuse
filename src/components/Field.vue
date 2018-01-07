@@ -5,13 +5,23 @@
       'has-bomb': field.hasBomb && field.isOpen,
       'is-open': field.isOpen,
       'is-marked': field.isMarked
-    }">{{field.numNeighbourBombs ? field.numNeighbourBombs : null}}</div>
+    }"
+    v-touch:longtap="emitLongtap(field)">
+    {{ field.numNeighbourBombs ? field.numNeighbourBombs : null }}
+  </div>
 </template>
 
 <script>
   export default {
     name: 'MField',
-    props: { field: Object }
+    props: { field: Object, longtap: Function },
+    methods: {
+      emitLongtap (field) {
+        return () => {
+          this.$emit('longtap', field)
+        }
+      }
+    }
   }
 </script>
 

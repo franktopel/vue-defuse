@@ -18,7 +18,7 @@
           :field="field"
           :key="`${field.x},${field.y}`"
           @click.native="open(field)"
-          @click.right.native.prevent="toggleBombMarker(field)"
+          @longtap="toggleBombMarker(field)"
         ></m-field>
       </div>
       <div class="playfield-overlay">
@@ -234,7 +234,7 @@ export default {
     stopTimer () {
       clearInterval(this.timer)
       this.timer = null
-    }
+    },
   },
   components: {
     MField
@@ -317,6 +317,7 @@ export default {
         }
         button {
           appearance: none;
+          background-color: #fff;
           padding: 0.5em 2em;
         }
       }
