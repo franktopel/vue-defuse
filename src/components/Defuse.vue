@@ -57,7 +57,14 @@
 import MField from './Field'
 const messages = require('../i18n/translations.json')
 const Field = require('../helper/Field')
+
+// get default language from either localStorage or from the browser
 var userLang = localStorage.getItem('defuse-language') || navigator.language || navigator.userLanguage
+
+// make sure the language is supported, fall back to 'en' otherwise
+if (Object.keys(messages).indexOf(userLang) === -1) {
+  userLang = 'en'
+}
 
 export default {
   name: 'Defuse',
