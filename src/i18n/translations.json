@@ -3,7 +3,8 @@
     "gamestate": {
       "won": "Gewonnen!",
       "lost": "Leider verloren!",
-      "retry": "Nochmal versuchen"
+      "retry": "Nochmal versuchen",
+      "newGame": "Neues Spiel"
     },
     "settings": {
       "label": {
@@ -43,7 +44,8 @@
     "gamestate": {
       "won": "You won!",
       "lost": "Game over!",
-      "retry": "Retry"
+      "retry": "Retry",
+      "newGame": "New game"
     },
     "settings": {
       "label": {

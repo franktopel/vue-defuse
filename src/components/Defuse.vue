@@ -1,16 +1,28 @@
 <template>
   <div class="defuse"
        @click.right.prevent>
-    <h2 class="game-title">Defuse! <button type="button" class="defuse-settings" @click="toggleSettings">⚙</button><button type="button" class="defuse-instructions" @click="toggleInstructions">❔</button></h2>
+    <h2 class="game-title">
+      Defuse!
+      <button type="button"
+              class="defuse-settings"
+              @click="toggleSettings">⚙</button>
+      <button type="button"
+              class="defuse-instructions"
+              @click="toggleInstructions">❔</button>
+    </h2>
     <div class="game-state">
       <span class="bomb-mark-count"
             :data-bomb-mark-count="remainingBombsCount"></span>
       <span class="win-lose-state"
             @click="buildMap()"
-      >{{ winLoseSymbol }}</span>
+            :title="message('gamestate.newGame')">{{ winLoseSymbol }}</span>
       <span class="timer">⌛ {{ timePassed | formatTimer }}</span>
     </div>
-    <div class="playfield" :class="{ 'game-over': gamestate === 'lost' || gamestate === 'won', 'defuse-settings': showSettings, 'defuse-instructions': showInstructions }">
+    <div class="playfield"
+         :class="{
+              'game-over': gamestate === 'lost' || gamestate === 'won',
+              'defuse-settings': showSettings,
+              'defuse-instructions': showInstructions }">
       <div class="row"
            v-for="row, index in map">
         <m-field
