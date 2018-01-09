@@ -387,7 +387,7 @@ export default {
 
     adjustFieldSize (x, y) {
       if (x * this.setFieldWidth > window.innerWidth - 50 || y * this.setFieldWidth > window.innerHeight - 170) {
-        this.setFieldWidth = Math.min(Math.floor((window.innerWidth - 50)/ x) - 2, Math.floor((window.innerHeight - 170) / y) - 2)
+        this.setFieldWidth = Math.min(Math.floor((window.innerWidth - 50) / x) - 2, Math.floor((window.innerHeight - 170) / y) - 2)
       }
     }
   },
