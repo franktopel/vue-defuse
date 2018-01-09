@@ -26,7 +26,7 @@
         <div class="inner">
           <h3>{{ message(`gamestate.${gamestate}`) }}</h3>
           <h4>{{ winLoseSymbol }}</h4>
-          <button type="button" @click="buildMap">{{ gamestate === 'lost' ? 'Try again' : 'Restart' }}</button>
+          <button type="button" @click="buildMap">{{ message('gamestate.retry') }}</button>
         </div>
       </div>
       <div class="playfield-overlay defuse-settings" id="defuse-settings" >
@@ -41,18 +41,20 @@
           <button type="button" @click="setParams(30, 20, 120)">{{ message('settings.label.difficulty.level.hard') }} (30 x 20, 120 💣)</button>
           <hr />
           <h3>{{ message('settings.label.headline') }}</h3>
-          <label>{{ message('settings.label.playfieldWidth') }}
-            <input type="number" min="1" :max="100" step="1" v-model="setX" :placeholder="message('settings.label.playfieldWidth')"/>
-          </label>
-          <label>{{ message('settings.label.playfieldHeight') }}
-            <input type="number" min="1" :max="100" step="1" v-model="setY" :placeholder="message('settings.label.playfieldHeight')"/>
-          </label>
-          <label>{{ message('settings.label.bombCount') }}
-            <input type="number" min="0" :max="X * Y" step="1" v-model="setBombCount" :placeholder="message('settings.label.bombCount')"/>
-          </label>
-          <label>{{ message('settings.label.fieldSize') }}
-            <input type="number" min="20" max="60" step="1" v-model="setFieldWidth" :placeholder="message('settings.label.fieldSize')"/>
-          </label>
+          <div class="defuse-settings-custom">
+            <label>{{ message('settings.label.playfieldWidth') }}
+              <input type="number" min="1" :max="100" step="1" v-model="setX" :placeholder="message('settings.label.playfieldWidth')"/>
+            </label>
+            <label>{{ message('settings.label.playfieldHeight') }}
+              <input type="number" min="1" :max="100" step="1" v-model="setY" :placeholder="message('settings.label.playfieldHeight')"/>
+            </label>
+            <label>{{ message('settings.label.bombCount') }}
+              <input type="number" min="0" :max="X * Y" step="1" v-model="setBombCount" :placeholder="message('settings.label.bombCount')"/>
+            </label>
+            <label>{{ message('settings.label.fieldSize') }}
+              <input type="number" min="20" max="60" step="1" v-model="setFieldWidth" :placeholder="message('settings.label.fieldSize')"/>
+            </label>
+          </div>
         </div>
       </div>
       <div class="playfield-overlay defuse-instructions" id="defuse-instructions" >
@@ -278,7 +280,7 @@ export default {
         if (numNeighbourBombs === 0) {
           neighbourFields.forEach(neighField => {
             if (!neighField.isOpen && !neighField.isMarked) {
-              window.setTimeout(() => { this.open(neighField) }, Math.floor(Math.random() * (30000 / (this.getX * this.getY))))
+              window.setTimeout(() => { this.open(neighField) }, Math.floor(10000 / (this.getX * this.getY)))
             }
           })
         }
@@ -364,13 +366,17 @@ export default {
     },
 
     setParams (x, y, m) {
-      if (x * this.setFieldWidth > window.innerWidth || y * this.setFieldWidth > window.innerHeight) {
-        this.setFieldWidth = Math.min(Math.floor(window.innerWidth / x) - 5, Math.floor(window.innerHeight / y) - 10)
-      }
+      this.adjustFieldSize(x, y)
       this.setX = x
       this.setY = y
       this.setBombCount = m
       this.toggleSettings()
+    },
+
+    adjustFieldSize (x, y) {
+      if (x * this.setFieldWidth > window.innerWidth - 50 || y * this.setFieldWidth > window.innerHeight - 170) {
+        this.setFieldWidth = Math.min(Math.floor((window.innerWidth - 50)/ x) - 2, Math.floor((window.innerHeight - 170) / y) - 2)
+      }
     }
   },
   components: {
@@ -403,15 +409,17 @@ export default {
       background-color: transparent;
       outline: none;
       position: absolute;
-      right: 0;
       top: 0;
       transition: all .4s ease;
       &:hover {
         transform: scale(2);
       }
     }
+    .defuse-settings {
+      right: 0;
+    }
     .defuse-instructions {
-      right: 2em;
+      left: 0;
     }
   }
 
@@ -530,15 +538,31 @@ export default {
         top: 2em;
       }
       label {
+        white-space: nowrap;
         input {
           display: block;
           margin: 0 auto 1em;
-          min-width: 120px;
+          min-width: 100px;
           text-align: center;
         }
       }
       button {
         display: inline-block;
+      }
+      .defuse-settings-custom {
+        columns: 2;
+        max-width: 280px;
+        margin: 0 auto;
+        @media screen and (min-width: 640px) {
+          columns: 4;
+          max-width: 500px;
+          label {
+            text-align: center;
+          }
+          input {
+            min-width: 115px;
+          }
+        }
       }
       .close {
         appearance: none;
