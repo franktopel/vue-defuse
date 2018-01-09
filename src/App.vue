@@ -70,7 +70,8 @@ export default {
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
     color: #2c3e50;
-    padding: 40px 60px;
+    padding: 1em;
+    text-align: center;
   }
 
   .vue-slider-component.vue-slider-vertical-reverse {

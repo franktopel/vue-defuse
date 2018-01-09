@@ -36,6 +36,7 @@
     align-items: center;
     background-color: #ddd;
     border: 1px solid #aaa;
+    border-collapse: collapse;
     display: flex;
     height: var(--fieldwidth);
     justify-content: center;

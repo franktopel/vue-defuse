@@ -1,7 +1,7 @@
 <template>
   <div class="defuse"
        @click.right.prevent>
-    <h2 class="game-title">Defuse! <button type="button" class="defuse-settings" @click="toggleSettings">⚙</button></h2>
+    <h2 class="game-title">Defuse! <button type="button" class="defuse-settings" @click="toggleSettings">⚙</button><button type="button" class="defuse-instructions" @click="toggleInstructions">❔</button></h2>
     <div class="game-state">
       <span class="bomb-mark-count"
             :data-bomb-mark-count="remainingBombsCount"></span>
@@ -10,7 +10,7 @@
       >{{ winLoseSymbol }}</span>
       <span class="timer">⌛ {{ timePassed | formatTimer }}</span>
     </div>
-    <div class="playfield" :class="{ 'game-over': gamestate === 'lost' || gamestate === 'won', 'defuse-settings': showSettings }">
+    <div class="playfield" :class="{ 'game-over': gamestate === 'lost' || gamestate === 'won', 'defuse-settings': showSettings, 'defuse-instructions': showInstructions }">
       <div class="row"
            v-for="row, index in map">
         <m-field
@@ -33,8 +33,14 @@
         <div class="language-switch">
           <button type="button" v-for="lang in languages" :class="{ 'active-language': language === lang }" @click="setLanguage(lang)">{{ lang }}</button>
         </div>
-        <button class="close" @click="showSettings = false">✖</button>
+        <button class="close" @click="toggleSettings">✖</button>
         <div class="inner">
+          <h3>{{ message('settings.label.difficulty.headline') }}</h3>
+          <button type="button" @click="setParams(10, 10, 10)">{{ message('settings.label.difficulty.level.easy') }} (10 x 10, 10 💣)</button>
+          <button type="button" @click="setParams(20, 20, 60)">{{ message('settings.label.difficulty.level.medium') }} (20 x 20, 60 💣)</button>
+          <button type="button" @click="setParams(30, 20, 120)">{{ message('settings.label.difficulty.level.hard') }} (30 x 20, 120 💣)</button>
+          <hr />
+          <h3>{{ message('settings.label.headline') }}</h3>
           <label>{{ message('settings.label.playfieldWidth') }}
             <input type="number" min="1" :max="100" step="1" v-model="setX" :placeholder="message('settings.label.playfieldWidth')"/>
           </label>
@@ -47,6 +53,16 @@
           <label>{{ message('settings.label.fieldSize') }}
             <input type="number" min="20" max="60" step="1" v-model="setFieldWidth" :placeholder="message('settings.label.fieldSize')"/>
           </label>
+        </div>
+      </div>
+      <div class="playfield-overlay defuse-instructions" id="defuse-instructions" >
+        <div class="language-switch">
+          <button type="button" v-for="lang in languages" :class="{ 'active-language': language === lang }" @click="setLanguage(lang)">{{ lang }}</button>
+        </div>
+        <button class="close" @click="toggleInstructions">✖</button>
+        <div class="inner">
+          <h3>{{ message('instructions.headline') }}</h3>
+          <p v-for="line in message('instructions.texts')">{{ line }}</p>
         </div>
       </div>
     </div>
@@ -96,6 +112,7 @@ export default {
       timer: null,
       gamestate: undefined,
       showSettings: false,
+      showInstructions: false,
       setX: this.X * 1,
       setY: this.Y * 1,
       setBombCount: this.numberOfBombs * 1,
@@ -318,7 +335,17 @@ export default {
     },
 
     toggleSettings () {
+      if (!this.showSettings) {
+        this.showInstructions = false
+      }
       this.showSettings = !this.showSettings
+    },
+
+    toggleInstructions () {
+      if (!this.showInstructions) {
+        this.showSettings = false
+      }
+      this.showInstructions = !this.showInstructions
     },
 
     message (key) {
@@ -335,6 +362,16 @@ export default {
         this.language = lang
       }
     },
+
+    setParams (x, y, m) {
+      if (x * this.setFieldWidth > window.innerWidth || y * this.setFieldWidth > window.innerHeight) {
+        this.setFieldWidth = Math.min(Math.floor(window.innerWidth / x) - 5, Math.floor(window.innerHeight / y) - 10)
+      }
+      this.setX = x
+      this.setY = y
+      this.setBombCount = m
+      this.toggleSettings()
+    }
   },
   components: {
     MField
@@ -359,7 +396,8 @@ export default {
     margin: 0 -.15em;
     position: relative;
     text-align: center;
-    button {
+    .defuse-settings,
+    .defuse-instructions {
       border: 0;
       bottom: 0;
       background-color: transparent;
@@ -371,6 +409,9 @@ export default {
       &:hover {
         transform: scale(2);
       }
+    }
+    .defuse-instructions {
+      right: 2em;
     }
   }
 
@@ -392,6 +433,28 @@ export default {
       white-space: nowrap;
       width: 32.5%;
     }
+  }
+
+
+
+  .bomb-mark-count {
+    /*border: 1px solid #ddd;*/
+    flex-basis: 2;
+    &::before {
+      content: "💣 "attr(data-bomb-mark-count)
+    }
+  }
+
+  .win-lose-state {
+    /*border: 1px solid #ddd;*/
+    font-size: 3em;
+    flex-basis: fit-content;
+  }
+
+  .timer {
+    /*border: 1px solid #ddd;*/
+    font-size: 1.5em;
+    flex-basis: 2;
   }
 
   .playfield-overlay {
@@ -456,19 +519,26 @@ export default {
       transition-duration: .5s;
       z-index: 9999;
       .inner {
+        bottom: 0;
         left: 0;
         opacity: .95;
+        overflow: scroll;
         position: absolute;
         padding: 2em 1em 1em;
+        right: 0;
+        text-align: center;
         top: 2em;
       }
       label {
         input {
           display: block;
-          margin-bottom: 1em;
+          margin: 0 auto 1em;
           min-width: 120px;
           text-align: center;
         }
+      }
+      button {
+        display: inline-block;
       }
       .close {
         appearance: none;
@@ -481,42 +551,60 @@ export default {
         position: absolute;
         right: 0;
         top: 0;
+        z-index: 2000;
       }
     }
   }
 
-  .playfield.game-over.defuse-settings {
+  .playfield.game-over.defuse-settings,
+  .playfield.game-over.defuse-instructions {
     .playfield-overlay.game-over {
       display: none;
     }
   }
 
-
-  .bomb-mark-count {
-    border: 1px solid #ddd;
-    flex-basis: 1;
-    &::before {
-      content: "💣 "attr(data-bomb-mark-count)
+  .playfield.defuse-instructions {
+    z-index: 1000;
+    .playfield-overlay.defuse-instructions {
+      color: #fff;
+      text-align: center;
+      transform: scale(1);
+      transition-duration: .5s;
+      z-index: 9999;
+      .inner {
+        bottom: 0;
+        left: 1em;
+        opacity: .95;
+        overflow: scroll;
+        position: absolute;
+        padding: 0 1em 1em;
+        text-align: left;
+        top: 2em;
+      }
+      .close {
+        appearance: none;
+        background-color: transparent;
+        border: 0;
+        color: #fff;
+        cursor: pointer;
+        font-size: 2em;
+        outline: 0;
+        position: absolute;
+        right: 0;
+        top: 0;
+        z-index: 2000;
+      }
+      h3 {
+        margin: 0;
+      }
     }
   }
 
-  .win-lose-state {
-    border: 1px solid #ddd;
-    font-size: 4em;
-    flex-basis: 1;
-  }
-
-  .timer {
-    border: 1px solid #ddd;
-    font-size: 1.5em;
-    flex-basis: 1;
-  }
-
   .language-switch {
-    position: absolute;
-    top: .4em;
     left: 1em;
     line-height: 1.5em;
+    position: absolute;
+    top: .4em;
     vertical-align: baseline;
     button {
       appearance: none;

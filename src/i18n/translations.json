@@ -7,11 +7,36 @@
     },
     "settings": {
       "label": {
+        "headline": "Eigene Parameter",
         "playfieldWidth": "Spielfeldbreite",
         "playfieldHeight": "Spielfeldhöhe",
         "fieldSize": "Feldbreite (px)",
-        "bombCount": "Anzahl der Bomben"
+        "bombCount": "Anzahl der Bomben",
+        "difficulty": {
+          "headline": "Schwierigkeitsgrad (Voreinstellungen)",
+          "level": {
+            "easy": "einfach",
+            "medium": "mittel",
+            "hard": "schwer"
+          }
+        }
       }
+    },
+    "instructions": {
+      "headline": "Wie es funktioniert",
+      "texts": [
+        "In Defuse! geht es darum, auf einem rechteckigen Minenfeld die zufälllig platzierten Minen zu entschärfen.",
+        "Das Minenfeld besteht aus einer Anzahl Reihen (Y) und Spalten (X).",
+        "Es besteht aus X * Y Einzelfeldern. Jedes Einzelfeld kann potentiell vermint 💣 sein.",
+        "Zu Beginn sind alle Felder verdeckt. Durch einfachen Klick auf ein Feld wird dieses Feld erkundet.",
+        "Erkundet man ein Feld, das eine Mine enthält, so endet das Spiel mit einer Niederlage.",
+        "Wenn man von einem Feld sicher ist, dass es vermint ist, so markiert 🚩 man dieses Feld durch Rechtsklick/ langes Berühren.",
+        "Auf dieselbe Weise kann man die Markierung auch wieder aufheben.",
+        "Solange ein Feld markiert ist, kann es nicht versehentlich erkundet werden.",
+        "Erkundet man ein Feld, das nicht vermint ist, so wird es aufgedeckt und zeigt die Anzahl der angrenzenden Felder an, die vermint sind.",
+        "Ist keines der angrenzenden Felder vermint (leeres weißes Feld), so werden automatisch alle angrenzenden Felder aufgedeckt.",
+        "Das Spiel ist gewonnen sobald alle Felder, die nicht vermint sind, aufgedeckt sind."
+      ]
     }
   },
   "en": {
@@ -22,11 +47,34 @@
     },
     "settings": {
       "label": {
+        "headline": "Custom parameters",
         "playfieldWidth": "Playfield width",
         "playfieldHeight": "Playfield height",
         "fieldSize": "Field width (px)",
-        "bombCount": "Number of bombs"
+        "bombCount": "Number of bombs",
+        "difficulty": {
+          "headline": "Difficulty level (presets)",
+          "level": {
+            "easy": "einfach",
+            "medium": "mittel",
+            "hard": "schwer"
+          }
+        }
       }
+    },
+    "instructions": {
+      "headline": "How it works",
+      "texts": [
+        "Defuse! is about defusing mines which are randomly placed on a rectangular minefield.",
+        "The minefield is made of a number of rows (Y) and columns (X).",
+        "It consists of X * Y single fields. Every single field can potentially hide a mine 💣.",
+        "At the start, all fields are concealed. You can explore a field by left clicking/tapping it.",
+        "When you explore a field containing a mine, it explodes and the game ends with a loss.",
+        "If you are sure that a specific field hides a mine, you can mark it with a flag 🚩 by right clicking/ tap-holding it.",
+        "If you explore a field that does not hide a mine, it is revealed and shows the number of adjacents fields containing a mine.",
+        "If none of the adjacent fields contains a mine (empty white field), all these adjacent fields will be revealed automatically.",
+        "The game is won as soon as all fields not containing a mine are revealed."
+      ]
     }
   }
 }
