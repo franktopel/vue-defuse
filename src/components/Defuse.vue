@@ -421,7 +421,7 @@ export default {
       bottom: 0;
       outline: none;
       position: absolute;
-      text-shadow: 0 0 3px #333;
+      text-shadow: 0 0 3px #fff;
       top: 0;
       transition: all .4s ease;
       &:hover {
