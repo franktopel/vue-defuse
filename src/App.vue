@@ -10,9 +10,6 @@
 
 <script>
 import Defuse from './components/Defuse'
-import VueSlider from 'vue-slider-component'
-var sliderOptions = require('./helper/sliderOptions')
-var verticalSliderOptions = require('./helper/verticalSliderOptions')
 
 export default {
   name: 'defuse',
