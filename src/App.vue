@@ -1,27 +1,5 @@
 <template>
   <div id="defuse">
-    <div v-if="false"><!-- set true if you want sliders to configure the game -->
-      <vue-slider
-        v-model="dimX"
-        v-bind="sliderOptions"
-      ></vue-slider>
-      <vue-slider
-        v-model="dimY"
-        v-bind="verticalSliderOptions"
-      ></vue-slider>
-      <p class="fieldwidth">Width/height of a single field:
-        <vue-slider
-          v-model="fieldWidth"
-          v-bind="Object.assign({}, sliderOptions, { width: 290, class: 'slider-small', min: 20, max: 100 })">
-        </vue-slider>
-      </p>
-      <p class="fieldwidth">Number of bombs:
-        <vue-slider
-          v-model="numberOfBombs"
-          v-bind="Object.assign({}, sliderOptions, { width: 290, class: 'slider-small', min: 0, max: dimY * dimX })">
-        </vue-slider>
-      </p>
-    </div>
     <Defuse
       :X="dimX | toInt"
       :Y="dimY | toInt"
@@ -44,8 +22,6 @@ export default {
       dimY: 10,
       fieldWidth: 60,
       numberOfBombs: 10,
-      sliderOptions,
-      verticalSliderOptions,
     }
   },
   components: {
