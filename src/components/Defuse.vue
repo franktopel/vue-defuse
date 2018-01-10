@@ -231,7 +231,7 @@ export default {
     },
 
     toggleBombMarker (field, event) {
-      if (event && event.sourceCapabilities.firesTouchEvents) {
+      if (event && event.hasOwnProperty(sourceCapabilities) && event.sourceCapabilities.hasOwnProperty(firesTouchEvents)) {
         return
       }
       this.startTimer()
