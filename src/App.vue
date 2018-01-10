@@ -26,7 +26,6 @@ export default {
   },
   components: {
     Defuse,
-    VueSlider
   },
   filters: {
     toInt (val) {
@@ -50,17 +49,8 @@ export default {
     text-align: center;
   }
 
-  .vue-slider-component.vue-slider-vertical-reverse {
-    left: 0;
-    position: absolute;
-  }
-
   .fieldwidth {
     margin: 50px auto 0;
-  }
-
-  .vue-slider-component.slider-small {
-    display: inline-block;
   }
 
   input, button {
