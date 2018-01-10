@@ -410,15 +410,15 @@ export default {
     background-color: #333;
     color: #fff;
     font-size: 2em;
-    padding: 0 1em;
     margin: 0 -.15em;
+    padding: 0 1em;
     position: relative;
     text-align: center;
     .defuse-settings,
     .defuse-instructions {
+      background-color: transparent;
       border: 0;
       bottom: 0;
-      background-color: transparent;
       outline: none;
       position: absolute;
       top: 0;
@@ -455,10 +455,7 @@ export default {
     }
   }
 
-
-
   .bomb-mark-count {
-    /*border: 1px solid #ddd;*/
     flex-basis: 2;
     &::before {
       content: "💣 "attr(data-bomb-mark-count)
@@ -466,13 +463,11 @@ export default {
   }
 
   .win-lose-state {
-    /*border: 1px solid #ddd;*/
     font-size: 3em;
     flex-basis: fit-content;
   }
 
   .timer {
-    /*border: 1px solid #ddd;*/
     font-size: 1.5em;
     flex-basis: 2;
   }
@@ -480,11 +475,11 @@ export default {
   .playfield-overlay {
     background-color: rgba(0, 0, 0, .66);
     bottom: 0;
-    position: absolute;
     left: 0;
+    position: absolute;
     right: 0;
-    transform: scale(0);
     top: 0;
+    transform: scale(0);
   }
 
   .playfield {
