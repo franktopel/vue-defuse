@@ -37,7 +37,9 @@
     background-color: #ddd;
     border: 1px solid #aaa;
     border-collapse: collapse;
+    color: #aaa;
     display: flex;
+    font-size: var(--fieldwidth);
     height: var(--fieldwidth);
     justify-content: center;
     margin: 0;

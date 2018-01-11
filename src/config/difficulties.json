@@ -1,0 +1,26 @@
+[
+  {
+    "name": "easy",
+    "numberOfBombs": 10,
+    "X": 10,
+    "Y": 10
+  },
+  {
+    "name": "medium",
+    "numberOfBombs": 60,
+    "X": 20,
+    "Y": 20
+  },
+  {
+    "name": "hard",
+    "numberOfBombs": 100,
+    "X": 30,
+    "Y": 20
+  },
+  {
+    "name": "insane",
+    "numberOfBombs": 500,
+    "X": 75,
+    "Y": 50
+  }
+]

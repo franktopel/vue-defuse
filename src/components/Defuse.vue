@@ -45,21 +45,26 @@
       <div class="playfield-overlay game-over">
         <div class="inner">
           <h3>{{ message(`gamestate.${gamestate}`) }}</h3>
+          <p v-if="newLocalRecord" class="new-record">{{ newLocalRecord }}</p>
           <h4>{{ winLoseSymbol }}</h4>
           <button type="button" @click="buildMap">{{ message('gamestate.retry') }}</button>
         </div>
       </div>
+
       <div class="playfield-overlay defuse-settings" id="defuse-settings" >
         <div class="language-switch">
           <button type="button" v-for="lang in languages" :class="{ 'active-language': language === lang }" @click="setLanguage(lang)">{{ lang }}</button>
         </div>
         <button class="close" @click="toggleSettings">✖</button>
         <div class="inner">
-          <h3>{{ message('settings.label.difficulty.headline') }}</h3>
-          <button type="button" @click="setParams(10, 10, 10)">{{ message('settings.label.difficulty.level.easy') }} (10 x 10, 10 💣)</button>
-          <button type="button" @click="setParams(20, 20, 60)">{{ message('settings.label.difficulty.level.medium') }} (20 x 20, 60 💣)</button>
-          <button type="button" @click="setParams(30, 20, 120)">{{ message('settings.label.difficulty.level.hard') }} (30 x 20, 120 💣)</button>
-          <hr />
+          <h3>{{ message('settings.label.selectedDifficulty.headline') }}</h3>
+          <button type="button" v-for="difficulty in difficulties" @click="setParams(difficulty.X, difficulty.Y, difficulty.numberOfBombs); toggleSettings()">
+            {{ message(`settings.label.difficulty.level.${difficulty.name}`) | upperCase }}
+            <br />
+            {{ difficulty.X }} x {{ difficulty.Y }}, {{ difficulty.numberOfBombs }} 💣
+          </button>
+          <br />
+          <br />
           <h3>{{ message('settings.label.headline') }}</h3>
           <div class="defuse-settings-custom">
             <label>{{ message('settings.label.playfieldWidth') }}
@@ -92,9 +97,11 @@
 </template>
 
 <script>
-import MField from './Field'
+import MField from './Field.vue'
 const messages = require('../i18n/translations.json')
-const Field = require('../helper/Field')
+const difficulties = require('../config/difficulties.json')
+const localRecords = JSON.parse(localStorage.getItem('defuse-records')) || JSON.parse('{"easy":null,"medium":null,"hard":null,"insane":null}')
+const Field = require('./Field.js')
 
 // get default language from either localStorage or from the browser
 var userLang = localStorage.getItem('defuse-language') || navigator.language || navigator.userLanguage
@@ -139,9 +146,13 @@ export default {
       setY: this.Y * 1,
       setBombCount: this.numberOfBombs * 1,
       setFieldWidth: this.fieldWidth * 1,
-      messages,
       language: userLang,
       actions: 0,
+      selectedDifficulty: 'easy',
+      difficulties,
+      messages,
+      localRecords: null,
+      newLocalRecord: null
     }
   },
   watch: {
@@ -183,6 +194,7 @@ export default {
   },
   created () {
     this.buildMap()
+    this.localRecords = localRecords
     document.querySelector(':root').style.setProperty('--fieldwidth', `${this.setFieldWidth ? this.setFieldWidth : this.fieldWidth}px`)
   },
   computed: {
@@ -210,22 +222,29 @@ export default {
       } else {
         return 0
       }
-    }
+    },
   },
   filters: {
     formatTimer (seconds) {
-      let mins, secs, hrs, remainingSecs
-      hrs = ('0' + Math.floor(seconds / 3600)).substr(-2)
-      remainingSecs = seconds - hrs * 3600
+      let days, mins, secs, hrs, remainingSecs
+      days = ('0' + Math.floor(seconds / (24 * 60 * 60))).substr(-2)
+      remainingSecs = seconds - days * (24 * 60 * 60)
+      hrs = ('0' + Math.floor(remainingSecs / (60 * 60))).substr(-2)
+      remainingSecs = seconds - hrs * (60 * 60)
       mins = ('0' + Math.floor(remainingSecs / 60)).substr(-2)
       secs = ('0' + remainingSecs % 60).substr(-2)
-      return `${hrs}:${mins}:${secs}`
+      return `${days}:${hrs}:${mins}:${secs}`
       // use this if all you wanna see is seconds filled up with zeros
       // if (seconds.toString().length < 4) {
       //   return ('0000' + seconds).substr(-4)
       // } else {
       //   return seconds
       // }
+    },
+    upperCase (str) {
+      if (typeof str === 'string') {
+        return str.toLocaleUpperCase()
+      }
     }
   },
   methods: {
@@ -343,6 +362,7 @@ export default {
       this.winLoseSymbol = '😄'
       this.gamestate = 'won'
       this.stopTimer()
+      this.updateLocalRecords()
     },
 
     endGame () {
@@ -383,11 +403,17 @@ export default {
       this.showInstructions = !this.showInstructions
     },
 
-    message (key) {
+    message (key, replacers) {
+      console.log(replacers)
       let message = messages[this.language]
       key.split('.').forEach(function (keypart) {
         message = message.hasOwnProperty(keypart) ? message[keypart] : message
       })
+      if (Array.isArray(replacers) && replacers.length && typeof message === 'string') {
+        replacers.forEach(function (replacement, index) {
+          message = message.replace(`%${index + 1}`, replacement)
+        })
+      }
       return typeof message === 'string' ? message : `{${key}}`
     },
 
@@ -403,12 +429,17 @@ export default {
       this.setX = x
       this.setY = y
       this.setBombCount = m
-      this.toggleSettings()
     },
 
     adjustFieldSize (x, y) {
-      if (x * this.setFieldWidth > window.innerWidth - 50 || y * this.setFieldWidth > window.innerHeight - 170) {
-        this.setFieldWidth = Math.min(Math.floor((window.innerWidth - 50) / x) - 2, Math.floor((window.innerHeight - 170) / y) - 2)
+      this.setFieldWidth = Math.min(Math.floor((window.innerWidth - 50) / x) - 2, Math.floor((window.innerHeight - 170) / y) - 2)
+    },
+
+    updateLocalRecords () {
+      if (!this.localRecords[this.selectedDifficulty] || this.localRecords[this.selectedDifficulty] > this.timePassed) {
+        this.localRecords[this.selectedDifficulty] = this.timePassed
+        localStorage.setItem('defuse-score', JSON.stringify(this.localRecords))
+        this.newLocalRecord = `${this.message('records.local.newRecord', [ this.selectedDifficulty, this.timePassed ])}`
       }
     }
   },
@@ -556,7 +587,7 @@ export default {
       z-index: 9999;
       .inner {
         left: 50%;
-        opacity: .5;
+        opacity: .9;
         position: absolute;
         top: 50%;
         transform: translate(-50%, -50%);
@@ -573,6 +604,9 @@ export default {
           appearance: none;
           background-color: #fff;
           padding: .5em 2em;
+        }
+        .new-record {
+          font-weight: bold;
         }
       }
     }
@@ -612,16 +646,6 @@ export default {
         columns: 2;
         max-width: 280px;
         margin: 0 auto;
-        @media screen and (min-width: 640px) {
-          columns: 4;
-          max-width: 500px;
-          label {
-            text-align: center;
-          }
-          input {
-            min-width: 115px;
-          }
-        }
       }
       .close {
         appearance: none;
