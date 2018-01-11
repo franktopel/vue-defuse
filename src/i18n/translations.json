@@ -46,7 +46,8 @@
     },
     "records": {
       "local": {
-        "newRecord": "Neuer persönlicher Rekord für den Schwierigkeitsgrad '%1': Nur %2 Sekunden!"
+        "newRecord": "Neuer persönlicher Rekord für den Schwierigkeitsgrad '%1': Nur %2 Sekunden!",
+        "records": "Deine persönlichen Bestzeiten"
       }
     }
   },
@@ -95,7 +96,8 @@
     },
     "records": {
       "local": {
-        "newRecord": "New personal record for difficulty level '%1': only %2 seconds!"
+        "newRecord": "New personal record for difficulty level '%1': only %2 seconds!",
+        "records": "Your personal highscores"
       }
     }
   }

@@ -9,6 +9,10 @@
       <button type="button"
               class="defuse-instructions"
               @click="toggleInstructions">❔</button>
+      <button type="button"
+              class="defuse-personal-records"
+              v-if="hasPersonalRecords"
+              @click="togglePersonalRecords">⚜</button>
     </h2>
     <div class="game-state">
       <span class="bomb-mark-count"
@@ -26,6 +30,7 @@
          :class="{
               'game-over': gamestate === 'lost' || gamestate === 'won',
               'defuse-settings': showSettings,
+              'defuse-personal-records': showPersonalRecords,
               'defuse-instructions': showInstructions }">
 
       <!-- playfield creation -->
@@ -84,6 +89,7 @@
           </div>
         </div>
       </div>
+
       <div class="playfield-overlay defuse-instructions" id="defuse-instructions" >
         <div class="language-switch">
           <button type="button" v-for="lang in languages" :class="{ 'active-language': language === lang }" @click="setLanguage(lang)">{{ lang }}</button>
@@ -92,6 +98,17 @@
         <div class="inner">
           <h3>{{ message('instructions.headline') }}</h3>
           <p v-for="line in message('instructions.texts')">{{ line }}</p>
+        </div>
+      </div>
+
+      <div class="playfield-overlay defuse-personal-records" id="defuse-personal-records">
+        <div class="language-switch">
+          <button type="button" v-for="lang in languages" :class="{ 'active-language': language === lang }" @click="setLanguage(lang)">{{ lang }}</button>
+        </div>
+        <button class="close" @click="togglePersonalRecords">✖</button>
+        <div class="inner">
+          <h3>{{ message('records.local.records') }}</h3>
+          <p v-for="difficulty in difficulties" v-if="localRecords[difficulty.name]">{{ message(`settings.label.difficulty.level.${difficulty.name}`) }}: {{ localRecords[difficulty.name] }}s</p>
         </div>
       </div>
     </div>
@@ -144,6 +161,7 @@ export default {
       gamestate: undefined,
       showSettings: false,
       showInstructions: false,
+      showPersonalRecords: false,
       setX: this.X * 1,
       setY: this.Y * 1,
       setBombCount: this.numberOfBombs * 1,
@@ -231,6 +249,16 @@ export default {
         return 0
       }
     },
+
+    hasPersonalRecords () {
+      let result = false
+      this.difficulties.forEach(difficulty => {
+        if (this.localRecords[difficulty.name]) {
+          result = true
+        }
+      })
+      return result
+    }
   },
   filters: {
     formatTimer (seconds) {
@@ -402,6 +430,7 @@ export default {
     toggleSettings () {
       if (!this.showSettings) {
         this.showInstructions = false
+        this.showPersonalRecords = false
       }
       this.showSettings = !this.showSettings
     },
@@ -409,8 +438,17 @@ export default {
     toggleInstructions () {
       if (!this.showInstructions) {
         this.showSettings = false
+        this.showPersonalRecords = false
       }
       this.showInstructions = !this.showInstructions
+    },
+
+    togglePersonalRecords () {
+      if (!this.showPersonalRecords) {
+        this.showSettings = false
+        this.showInstructions = false
+      }
+      this.showPersonalRecords = !this.showPersonalRecords
     },
 
     message (key, replacers) {
@@ -423,7 +461,7 @@ export default {
           message = message.replace(`%${index + 1}`, replacement)
         })
       }
-      return typeof message === 'string' ? message : `{${key}}`
+      return typeof message === 'string' || Array.isArray(message) ? message : `{${key}}`
     },
 
     setLanguage (lang) {
@@ -479,7 +517,8 @@ export default {
     position: relative;
     text-align: center;
     .defuse-settings,
-    .defuse-instructions {
+    .defuse-instructions,
+    .defuse-personal-records {
       background-color: transparent;
       border: 0;
       bottom: 0;
@@ -502,6 +541,9 @@ export default {
       right: 0;
     }
     .defuse-instructions {
+      right: 2em;
+    }
+    .defuse-personal-records {
       left: 0;
     }
   }
@@ -685,22 +727,58 @@ export default {
   }
 
   .playfield.defuse-instructions {
+     z-index: 1000;
+     .playfield-overlay.defuse-instructions {
+       color: #fff;
+       text-align: center;
+       transform: scale(1);
+       transition-duration: .5s;
+       z-index: 9999;
+       .inner {
+         bottom: 0;
+         left: 1em;
+         opacity: .95;
+         overflow: scroll;
+         position: absolute;
+         padding: 0 1em 1em;
+         text-align: left;
+         top: 2em;
+       }
+       .close {
+         appearance: none;
+         background-color: transparent;
+         border: 0;
+         color: #fff;
+         cursor: pointer;
+         font-size: 2em;
+         outline: 0;
+         position: absolute;
+         right: 0;
+         top: 0;
+         z-index: 2000;
+       }
+       h3 {
+         margin: 0;
+       }
+     }
+   }
+  .playfield.defuse-personal-records {
     z-index: 1000;
-    .playfield-overlay.defuse-instructions {
+    .playfield-overlay.defuse-personal-records {
       color: #fff;
       text-align: center;
       transform: scale(1);
       transition-duration: .5s;
       z-index: 9999;
       .inner {
-        bottom: 0;
-        left: 1em;
+        left: 50%;
         opacity: .95;
         overflow: scroll;
         position: absolute;
         padding: 0 1em 1em;
-        text-align: left;
-        top: 2em;
+        text-align: center;
+        top: 50%;
+        transform: translate(-50%, -50%);
       }
       .close {
         appearance: none;
