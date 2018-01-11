@@ -1,7 +1,7 @@
 {
   "de": {
     "gamestate": {
-      "won": "Gelöst!",
+      "won": "Gelöst in %1 Sekunden!",
       "lost": "Leider verloren!",
       "retry": "Nochmal spielen",
       "newGame": "Neues Spiel"
@@ -46,14 +46,14 @@
     },
     "records": {
       "local": {
-        "newRecord": "Neuer persönlicher Rekord für den Schwierigkeitsgrad '%1': Nur %2 Sekunden!",
+        "newRecord": "Wow - Neuer persönlicher Rekord für den Schwierigkeitsgrad '%1'!",
         "records": "Deine persönlichen Bestzeiten"
       }
     }
   },
   "en": {
     "gamestate": {
-      "won": "Solved!",
+      "won": "Solved in %1 seconds!",
       "lost": "Game over!",
       "retry": "Play again",
       "newGame": "New game"
@@ -96,7 +96,7 @@
     },
     "records": {
       "local": {
-        "newRecord": "New personal record for difficulty level '%1': only %2 seconds!",
+        "newRecord": "New personal record for difficulty level '%1'!",
         "records": "Your personal highscores"
       }
     }

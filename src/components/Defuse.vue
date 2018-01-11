@@ -49,7 +49,7 @@
       <!-- overlays for gamestate, instructions and settings -->
       <div class="playfield-overlay game-over">
         <div class="inner">
-          <h3>{{ message(`gamestate.${gamestate}`) }}</h3>
+          <h3>{{ message(`gamestate.${gamestate}`, [ timePassed ]) }}</h3>
           <p v-if="newLocalRecord" class="new-record">{{ newLocalRecord }}</p>
           <h4>{{ winLoseSymbol }}</h4>
           <button type="button" @click="buildMap">{{ message('gamestate.retry') }}</button>
@@ -407,6 +407,7 @@ export default {
       this.winLoseSymbol = '😡'
       this.gamestate = 'lost'
       this.stopTimer()
+      this.newLocalRecord = null
     },
 
     startTimer () {
@@ -490,6 +491,8 @@ export default {
         this.localRecords[this.selectedDifficulty] = this.timePassed
         localStorage.setItem('defuse-records', JSON.stringify(this.localRecords))
         this.newLocalRecord = `${this.message('records.local.newRecord', [ this.selectedDifficulty, this.timePassed ])}`
+      } else {
+        this.newLocalRecord = null
       }
     }
   },
