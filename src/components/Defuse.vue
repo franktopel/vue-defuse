@@ -58,7 +58,9 @@
         <button class="close" @click="toggleSettings">✖</button>
         <div class="inner">
           <h3>{{ message('settings.label.selectedDifficulty.headline') }}</h3>
-          <button type="button" v-for="difficulty in difficulties" @click="setParams(difficulty.X, difficulty.Y, difficulty.numberOfBombs); toggleSettings()">
+          <button type="button"
+                  v-for="difficulty in difficulties"
+                  @click="setParams(difficulty.X, difficulty.Y, difficulty.numberOfBombs, difficulty.name); toggleSettings()">
             {{ message(`settings.label.difficulty.level.${difficulty.name}`) | upperCase }}
             <br />
             {{ difficulty.X }} x {{ difficulty.Y }}, {{ difficulty.numberOfBombs }} 💣
@@ -201,21 +203,27 @@ export default {
     remainingBombsCount () {
       return this.numberOfBombsValidated - this.bombsMarkedCount
     },
+
     numberOfBombsValidated () {
       return Math.min((this.getX * this.getY), this.getBombCount ? parseInt(this.getBombCount) : this.numberOfBombs)
     },
+
     getX () {
       return this.setX ? parseInt(this.setX) : this.X
     },
+
     getY () {
       return this.setY ? parseInt(this.setY) : this.Y
     },
+
     getBombCount () {
       return this.setBombCount ? parseInt(this.setBombCount) : this.numberOfBombs
     },
+
     languages () {
       return Object.keys(this.messages)
     },
+
     apm () {
       if (this.actions && this.timePassed) {
         return Math.floor(this.actions / (this.timePassed / 60))
@@ -226,7 +234,7 @@ export default {
   },
   filters: {
     formatTimer (seconds) {
-      let days, mins, secs, hrs, remainingSecs
+      let days, hrs, mins, secs, remainingSecs
       days = ('0' + Math.floor(seconds / (24 * 60 * 60))).substr(-2)
       remainingSecs = seconds - days * (24 * 60 * 60)
       hrs = ('0' + Math.floor(remainingSecs / (60 * 60))).substr(-2)
@@ -242,9 +250,7 @@ export default {
       // }
     },
     upperCase (str) {
-      if (typeof str === 'string') {
-        return str.toLocaleUpperCase()
-      }
+      return typeof str === 'string' ? str.toLocaleUpperCase() : ''
     }
   },
   methods: {
@@ -332,7 +338,11 @@ export default {
         if (numNeighbourBombs === 0) {
           neighbourFields.forEach(neighField => {
             if (!neighField.isOpen && !neighField.isMarked) {
-              window.setTimeout(() => { this.open(neighField, false) }, Math.floor(10000 / (this.getX * this.getY)))
+              if (this.getX * this.getY > 1000) {
+                this.open(neighField, false)
+              } else {
+                window.setTimeout(() => { this.open(neighField, false) }, Math.floor(10000 / (this.getX * this.getY)))
+              }
             }
           })
         }
@@ -404,7 +414,6 @@ export default {
     },
 
     message (key, replacers) {
-      console.log(replacers)
       let message = messages[this.language]
       key.split('.').forEach(function (keypart) {
         message = message.hasOwnProperty(keypart) ? message[keypart] : message
@@ -424,11 +433,14 @@ export default {
       }
     },
 
-    setParams (x, y, m) {
+    setParams (x, y, m, d) {
       this.adjustFieldSize(x, y)
       this.setX = x
       this.setY = y
       this.setBombCount = m
+      if (d) {
+        this.selectedDifficulty = d
+      }
     },
 
     adjustFieldSize (x, y) {
@@ -438,7 +450,7 @@ export default {
     updateLocalRecords () {
       if (!this.localRecords[this.selectedDifficulty] || this.localRecords[this.selectedDifficulty] > this.timePassed) {
         this.localRecords[this.selectedDifficulty] = this.timePassed
-        localStorage.setItem('defuse-score', JSON.stringify(this.localRecords))
+        localStorage.setItem('defuse-records', JSON.stringify(this.localRecords))
         this.newLocalRecord = `${this.message('records.local.newRecord', [ this.selectedDifficulty, this.timePassed ])}`
       }
     }
@@ -515,6 +527,8 @@ export default {
   }
 
   .bomb-mark-count {
+    padding-left: .5em;
+    text-align: left;
     &::before {
       content: "💣 "attr(data-bomb-mark-count)
     }
@@ -531,7 +545,7 @@ export default {
   .stats {
     list-style-type: none;
     margin: 0;
-    padding: 0;
+    padding: 0 .5em;
     text-align: left;
     min-width: 90px;
     width: 5%;
