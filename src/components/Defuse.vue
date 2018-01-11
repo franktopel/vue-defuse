@@ -776,7 +776,6 @@ export default {
       .inner {
         left: 50%;
         opacity: .95;
-        overflow: scroll;
         position: absolute;
         padding: 0 1em 1em;
         text-align: center;
