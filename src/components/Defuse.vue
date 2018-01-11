@@ -17,23 +17,31 @@
             @click="buildMap()"
             :title="message('gamestate.newGame')">{{ winLoseSymbol }}</span>
       <span class="timer">⌛ {{ timePassed | formatTimer }}</span>
+      <ul class="stats">
+        <li class="actions"><span class="label">{{ message('stats.actions') }}:</span> <span class="value"> {{ actions }}</span></li>
+        <li class="apm"><span class="label">{{ message('stats.apm') }}:</span> <span class="value"> {{ apm }}</span></li>
+      </ul>
     </div>
     <div class="playfield"
          :class="{
               'game-over': gamestate === 'lost' || gamestate === 'won',
               'defuse-settings': showSettings,
               'defuse-instructions': showInstructions }">
+
+      <!-- playfield creation -->
       <div class="row"
            v-for="row, index in map">
         <m-field
           v-for="field in row"
           :field="field"
           :key="`${field.x},${field.y}`"
-          @click.native.prevent="open(field)"
+          @click.native.prevent="open(field, true)"
           @click.right.native.prevent="toggleBombMarker(field, $event)"
           @longtap="longtap(field)"
         ></m-field>
       </div>
+
+      <!-- overlays for gamestate, instructions and settings -->
       <div class="playfield-overlay game-over">
         <div class="inner">
           <h3>{{ message(`gamestate.${gamestate}`) }}</h3>
@@ -133,6 +141,7 @@ export default {
       setFieldWidth: this.fieldWidth * 1,
       messages,
       language: userLang,
+      actions: 0,
     }
   },
   watch: {
@@ -194,6 +203,13 @@ export default {
     },
     languages () {
       return Object.keys(this.messages)
+    },
+    apm () {
+      if (this.actions && this.timePassed) {
+        return Math.floor(this.actions / (this.timePassed / 60))
+      } else {
+        return 0
+      }
     }
   },
   filters: {
@@ -214,6 +230,7 @@ export default {
   },
   methods: {
     clearMap () {
+      this.actions = 0
       this.timePassed = 0
       this.stopTimer()
       this.winLoseSymbol = '😃'
@@ -234,6 +251,7 @@ export default {
       if (event && event.hasOwnProperty('sourceCapabilities') && event.sourceCapabilities.hasOwnProperty('firesTouchEvents')) {
         return
       }
+      this.actions++
       this.startTimer()
       if (field.isOpen) {
         return
@@ -268,7 +286,10 @@ export default {
       }
     },
 
-    open (field) {
+    open (field, manuallyTriggered) {
+      if (manuallyTriggered) {
+        this.actions++
+      }
       this.startTimer()
       if (field.isMarked) {
         return
@@ -292,7 +313,7 @@ export default {
         if (numNeighbourBombs === 0) {
           neighbourFields.forEach(neighField => {
             if (!neighField.isOpen && !neighField.isMarked) {
-              window.setTimeout(() => { this.open(neighField) }, Math.floor(10000 / (this.getX * this.getY)))
+              window.setTimeout(() => { this.open(neighField, false) }, Math.floor(10000 / (this.getX * this.getY)))
             }
           })
         }
@@ -365,9 +386,9 @@ export default {
     message (key) {
       let message = messages[this.language]
       key.split('.').forEach(function (keypart) {
-        message = message.hasOwnProperty(keypart) ? message[keypart] : undefined
+        message = message.hasOwnProperty(keypart) ? message[keypart] : message
       })
-      return message || key
+      return typeof message === 'string' ? message : `{${key}}`
     },
 
     setLanguage (lang) {
@@ -419,10 +440,16 @@ export default {
       background-color: transparent;
       border: 0;
       bottom: 0;
+      font-size: .8em;
       outline: none;
       position: absolute;
-      text-shadow: 0 0 3px #fff;
-      top: 0;
+      text-shadow: 0 0 15px #fff,
+                  0 0 5px #fff,
+                 1px 1px 1px #fff,
+                 1px -1px 1px #fff,
+                 -1px 1px 1px #fff,
+                 -1px -1px 1px #fff;
+      top: -.3em;
       transition: all .4s ease;
       &:hover {
         transform: scale(2);
@@ -457,7 +484,6 @@ export default {
   }
 
   .bomb-mark-count {
-    flex-basis: 2;
     &::before {
       content: "💣 "attr(data-bomb-mark-count)
     }
@@ -465,12 +491,37 @@ export default {
 
   .win-lose-state {
     font-size: 3em;
-    flex-basis: fit-content;
   }
 
   .timer {
     font-size: 1.5em;
-    flex-basis: 2;
+  }
+
+  .stats {
+    list-style-type: none;
+    margin: 0;
+    padding: 0;
+    text-align: left;
+    min-width: 90px;
+    width: 5%;
+    .actions,
+    .apm {
+      font-size: 0;
+      font-family: Consolas, Monaco, 'Andale Mono', 'Ubuntu Mono', monospace;
+      .value,
+      .label {
+        font-size: 10px;
+        display: inline-block;
+      }
+      .label {
+        width: 80%;
+      }
+      .value {
+        margin-right: 5%;
+        text-align: right;
+        width: 15%;
+      }
+    }
   }
 
   .playfield-overlay {
@@ -649,7 +700,7 @@ export default {
       outline: none;
       transform-origin: center 70%;
       transition: all .1s linear;
-      &::last-of-type() {
+      &:last-of-type() {
         margin-right: 0;
       }
       &.active-language {

@@ -1,7 +1,7 @@
 {
   "de": {
     "gamestate": {
-      "won": "Gewonnen!",
+      "won": "Gelöst!",
       "lost": "Leider verloren!",
       "retry": "Nochmal versuchen",
       "newGame": "Neues Spiel"
@@ -38,11 +38,15 @@
         "Ist keines der angrenzenden Felder vermint (leeres weißes Feld), so werden automatisch alle angrenzenden Felder aufgedeckt.",
         "Das Spiel ist gewonnen sobald alle Felder, die nicht vermint sind, aufgedeckt sind."
       ]
+    },
+    "stats": {
+      "actions": "Aktionen",
+      "apm": "APM"
     }
   },
   "en": {
     "gamestate": {
-      "won": "You won!",
+      "won": "Solved!",
       "lost": "Game over!",
       "retry": "Retry",
       "newGame": "New game"
@@ -77,6 +81,10 @@
         "If none of the adjacent fields contains a mine (empty white field), all these adjacent fields will be revealed automatically.",
         "The game is won as soon as all fields not containing a mine are revealed."
       ]
+    },
+    "stats": {
+      "actions": "Actions",
+      "apm": "APM"
     }
   }
 }
