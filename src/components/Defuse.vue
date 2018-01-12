@@ -498,16 +498,16 @@ export default {
   },
   components: {
     MField
-  }
+  },
 }
 </script>
 
 <style lang="scss">
   .defuse {
+    border: 2px solid #aaa;
     background-color: #f0f0f0;
     display: inline-block;
     position: relative;
-    border: 2px solid #aaa;
     padding: 0 .3em .3em;
   }
 
@@ -741,7 +741,7 @@ export default {
          bottom: 0;
          left: 1em;
          opacity: .95;
-         overflow: scroll;
+         overflow-y: auto;
          position: absolute;
          padding: 0 1em 1em;
          text-align: left;
