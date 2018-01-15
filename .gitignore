@@ -15,3 +15,4 @@ yarn-error.log*
 /api/
 /composer.phar
 /install-composer.sh
+/defuse-api/

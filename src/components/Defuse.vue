@@ -116,7 +116,9 @@
 </template>
 
 <script>
+import axios from 'axios'
 import MField from './Field.vue'
+const qs = require('qs')
 const messages = require('../i18n/translations.json')
 const difficulties = require('../config/difficulties.json')
 const localRecords = JSON.parse(localStorage.getItem('defuse-records')) || JSON.parse('{"easy":null,"medium":null,"hard":null,"insane":null}')
@@ -172,7 +174,10 @@ export default {
       difficulties,
       messages,
       localRecords: null,
-      newLocalRecord: null
+      newLocalRecord: null,
+      serverRecords: null,
+      playerName: '__user__',
+      recordsStoreUrl: 'https://connexo.de/defuse/defuse-api/set.php'
     }
   },
   watch: {
@@ -214,6 +219,16 @@ export default {
   },
   created () {
     this.buildMap()
+    axios.get('https://connexo.de/defuse/defuse-api/get.php', {
+      // headers: {'content-type': 'application/json'}
+    })
+      .then(response => {
+        this.serverRecords = response.data
+        console.log(response)
+      })
+      .catch(error => {
+        console.log(error)
+      })
     this.localRecords = localRecords
     document.querySelector(':root').style.setProperty('--fieldwidth', `${this.setFieldWidth ? this.setFieldWidth : this.fieldWidth}px`)
   },
@@ -401,6 +416,7 @@ export default {
       this.gamestate = 'won'
       this.stopTimer()
       this.updateLocalRecords()
+      this.storeGameResults()
     },
 
     endGame () {
@@ -408,6 +424,7 @@ export default {
       this.gamestate = 'lost'
       this.stopTimer()
       this.newLocalRecord = null
+      this.storeGameResults()
     },
 
     startTimer () {
@@ -494,7 +511,36 @@ export default {
       } else {
         this.newLocalRecord = null
       }
-    }
+    },
+
+    storeGameResults () {
+      if (!this.recordsStoreUrl) {
+        return
+      }
+
+      if (this.gamestate === 'won') {
+        this.playerName = window.prompt(this.message('records.server.askname'), this.message('records.server.placeholder'))
+        if (!this.playerName) {
+          this.playerName = '__user__'
+        }
+      }
+
+      let payload = {
+        seconds: this.timePassed,
+        difficulty: this.selectedDifficulty,
+        actions: this.actions,
+        gamestate: this.gamestate,
+        name: this.playerName
+      }
+
+      axios.post('https://connexo.de/defuse/defuse-api/set.php', qs.stringify(payload))
+        .then(response => {
+          this.playerName = '__user__'
+        })
+        .catch(function (error) {
+          console.log(error)
+        })
+    },
   },
   components: {
     MField
