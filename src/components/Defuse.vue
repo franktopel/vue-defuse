@@ -177,7 +177,12 @@ export default {
       newLocalRecord: null,
       serverRecords: null,
       playerName: '__user__',
-      recordsStoreUrl: 'https://connexo.de/defuse/defuse-api/set.php'
+      recordsStoreUrl: {
+        base: 'https://connexo.de/defuse/defuse-api',
+        get: 'https://connexo.de/defuse/defuse-api/get.php',
+        set: 'https://connexo.de/defuse/defuse-api/set.php'
+      },
+      storesRecordsOnServer: true, // set this to false if you haven't created services on your server to store game results
     }
   },
   watch: {
@@ -219,16 +224,18 @@ export default {
   },
   created () {
     this.buildMap()
-    axios.get('https://connexo.de/defuse/defuse-api/get.php', {
-      // headers: {'content-type': 'application/json'}
-    })
-      .then(response => {
-        this.serverRecords = response.data
-        console.log(response)
+    if (this.storesRecordsOnServer) {
+      axios.get(this.recordsStoreUrl.get, {
+        // headers: {'content-type': 'application/json'}
       })
-      .catch(error => {
-        console.log(error)
-      })
+        .then(response => {
+          this.serverRecords = response.data
+          console.log(response)
+        })
+        .catch(error => {
+          console.log(error)
+        })
+    }
     this.localRecords = localRecords
     document.querySelector(':root').style.setProperty('--fieldwidth', `${this.setFieldWidth ? this.setFieldWidth : this.fieldWidth}px`)
   },
@@ -514,11 +521,11 @@ export default {
     },
 
     storeGameResults () {
-      if (!this.recordsStoreUrl) {
+      if (!this.storesRecordsOnServer) {
         return
       }
 
-      if (this.gamestate === 'won') {
+      if (this.gamestate === 'won' && !this.playerName === '__user__') {
         this.playerName = window.prompt(this.message('records.server.askname'), this.message('records.server.placeholder'))
         if (!this.playerName) {
           this.playerName = '__user__'
@@ -530,10 +537,13 @@ export default {
         difficulty: this.selectedDifficulty,
         actions: this.actions,
         gamestate: this.gamestate,
-        name: this.playerName
+        name: this.playerName,
+        x: this.X,
+        y: this.Y,
+        bombCount: this.numberOfBombs,
       }
 
-      axios.post('https://connexo.de/defuse/defuse-api/set.php', qs.stringify(payload))
+      axios.post(this.recordsStoreUrl.set, qs.stringify(payload))
         .then(response => {
           this.playerName = '__user__'
         })
