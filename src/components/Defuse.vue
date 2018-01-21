@@ -62,7 +62,7 @@
         </div>
         <button class="close" @click="toggleSettings">✖</button>
         <div class="inner">
-          <h3>{{ message('settings.label.selectedDifficulty.headline') }}</h3>
+          <h3>{{ message('settings.label.difficulty.headline') }}</h3>
           <button type="button"
                   v-for="difficulty in difficulties"
                   @click="setParams(difficulty.X, difficulty.Y, difficulty.numberOfBombs, difficulty.name); toggleSettings()">
