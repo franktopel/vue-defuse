@@ -539,7 +539,7 @@ export default {
     },
 
     updateLocalRecords () {
-      if (this.selectedDifficulty === 'custom') {
+      if (this.selectedDifficulty === 'custom' || this.showSettings) {
         return
       }
       if (!this.localRecords[this.selectedDifficulty] || this.localRecords[this.selectedDifficulty] > this.timePassed) {
@@ -558,7 +558,7 @@ export default {
     },
 
     storeGameResults () {
-      if (!this.storesRecordsOnServer) {
+      if (!this.storesRecordsOnServer || this.showSettings) {
         return
       }
 
