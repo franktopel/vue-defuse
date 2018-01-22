@@ -159,6 +159,7 @@ export default {
       closedFieldCount: 0,
       winLoseSymbol: '',
       timePassed: 0,
+      timeStarted: null,
       timer: null,
       gamestate: undefined,
       showSettings: false,
@@ -436,9 +437,9 @@ export default {
 
     startTimer () {
       if (!this.timer) {
-        this.timePassed = 0
+        this.timeStarted = Date.now()
         this.timer = setInterval(() => {
-          this.timePassed++
+          this.timePassed = Math.round((Date.now() - this.timeStarted) / 1000)
         }, 1000)
       }
     },
@@ -514,7 +515,13 @@ export default {
       if (!this.localRecords[this.selectedDifficulty] || this.localRecords[this.selectedDifficulty] > this.timePassed) {
         this.localRecords[this.selectedDifficulty] = this.timePassed
         localStorage.setItem('defuse-records', JSON.stringify(this.localRecords))
-        this.newLocalRecord = `${this.message('records.local.newRecord', [ this.selectedDifficulty, this.timePassed ])}`
+        this.newLocalRecord = this.message(
+          'records.local.newRecord',
+          [
+            this.message(`settings.label.difficulty.level.${this.selectedDifficulty}`),
+            this.timePassed
+          ]
+        )
       } else {
         this.newLocalRecord = null
       }
@@ -526,7 +533,7 @@ export default {
       }
 
       if (this.gamestate === 'won' && !this.playerName === '__user__') {
-        this.playerName = window.prompt(this.message('records.server.askname'), this.message('records.server.placeholder'))
+        this.playerName = window.prompt(this.message('records.server.askname'), this.playerName || this.message('records.server.placeholder'))
         if (!this.playerName) {
           this.playerName = '__user__'
         }

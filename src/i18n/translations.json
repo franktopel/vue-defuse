@@ -46,7 +46,7 @@
     },
     "records": {
       "local": {
-        "newRecord": "Wow - Neuer persönlicher Rekord für den Schwierigkeitsgrad '%1'!",
+        "newRecord": "Wow - Neuer persönlicher Rekord für den Schwierigkeitsgrad '%1'! Gelöst in nur %2 Sekunden!",
         "records": "Deine persönlichen Bestzeiten"
       },
       "server": {
@@ -100,7 +100,7 @@
     },
     "records": {
       "local": {
-        "newRecord": "New personal record for difficulty level '%1'!",
+        "newRecord": "New personal record for difficulty level '%1'! Solved in just %2 seconds!",
         "records": "Your personal highscores"
       },
       "server": {
