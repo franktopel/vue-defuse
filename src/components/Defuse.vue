@@ -579,7 +579,7 @@ export default {
     color: #fff;
     font-size: 2em;
     margin: 0 -.15em;
-    padding: 0 1em;
+    padding: 0 3.5em 0 2em;
     position: relative;
     text-align: center;
     .defuse-settings,
@@ -590,6 +590,7 @@ export default {
       bottom: 0;
       font-size: .8em;
       outline: none;
+      padding: 0;
       position: absolute;
       text-shadow: 0 0 15px #fff,
                   0 0 5px #fff,
@@ -597,20 +598,20 @@ export default {
                  1px -1px 1px #fff,
                  -1px 1px 1px #fff,
                  -1px -1px 1px #fff;
-      top: -.3em;
+      top: 0;
       transition: all .4s ease;
       &:hover {
-        transform: scale(2);
+        transform: scale(1.75);
       }
     }
     .defuse-settings {
-      right: 0;
+      right: .5em;
     }
     .defuse-instructions {
-      right: 2em;
+      right: 2.5em;
     }
     .defuse-personal-records {
-      left: 0;
+      left: .5em;
     }
   }
 
