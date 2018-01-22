@@ -202,7 +202,7 @@ export default {
       localRecords: null,
       newLocalRecord: null,
       serverRecords: null,
-      playerName: '__user__',
+      playerName: null,
       recordsStoreUrl: {
         base: 'https://connexo.de/defuse/defuse-api',
         get: 'https://connexo.de/defuse/defuse-api/get.php',
@@ -562,7 +562,7 @@ export default {
         return
       }
 
-      if (this.gamestate === 'won' && !this.playerName === '__user__') {
+      if (this.gamestate === 'won') {
         this.playerName = window.prompt(this.message('records.server.askname'), this.playerName || this.message('records.server.placeholder'))
         if (!this.playerName) {
           this.playerName = '__user__'
@@ -582,10 +582,10 @@ export default {
 
       axios.post(this.recordsStoreUrl.set, qs.stringify(payload))
         .then(response => {
-          this.playerName = '__user__'
+          // this.playerName = '__user__'
         })
         .catch(function (error) {
-          console.log(error)
+          console.error(error)
         })
     },
   },
