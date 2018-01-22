@@ -539,7 +539,7 @@ export default {
     },
 
     updateLocalRecords () {
-      if (!(this.selectedDifficulty in difficultiesKeys)) {
+      if (this.selectedDifficulty === 'custom') {
         return
       }
       if (!this.localRecords[this.selectedDifficulty] || this.localRecords[this.selectedDifficulty] > this.timePassed) {
@@ -558,7 +558,7 @@ export default {
     },
 
     storeGameResults () {
-      if (!this.storesRecordsOnServer || !(this.selectedDifficulty in difficultiesKeys)) {
+      if (!this.storesRecordsOnServer) {
         return
       }
 

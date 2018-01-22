@@ -19,7 +19,8 @@
             "easy": "einfach",
             "medium": "mittel",
             "hard": "schwer",
-            "insane": "irrsinnig"
+            "insane": "irrsinnig",
+            "custom": "custom"
           }
         }
       }
@@ -32,7 +33,7 @@
         "Es besteht aus X * Y Einzelfeldern. Jedes Einzelfeld kann potentiell vermint 💣 sein.",
         "Zu Beginn sind alle Felder verdeckt. Durch einfachen Klick auf ein Feld wird dieses Feld erkundet.",
         "Erkundet man ein Feld, das eine Mine enthält, so endet das Spiel mit einer Niederlage.",
-        "Wenn man von einem Feld sicher ist, dass es vermint ist, so markiert 🚩 man dieses Feld durch Rechtsklick/ langes Berühren.",
+        "Wenn man von einem Feld sicher ist, dass es vermint ist, so markiert 🚩 man dieses Feld durch Rechtsklick/langes Berühren.",
         "Auf dieselbe Weise kann man die Markierung auch wieder aufheben.",
         "Solange ein Feld markiert ist, kann es nicht versehentlich erkundet werden.",
         "Erkundet man ein Feld, das nicht vermint ist, so wird es aufgedeckt und zeigt die Anzahl der angrenzenden Felder an, die vermint sind.",
@@ -50,7 +51,7 @@
         "records": "Deine persönlichen Bestzeiten"
       },
       "server": {
-        "askname": "Sie können nun einen Namen eingeben, unter dem dieses Resultat in der Rangliste gespeichert wird:",
+        "askname": "Ihr Name für die Rangliste:",
         "placeholder": "Name"
       }
     }
@@ -75,7 +76,8 @@
             "easy": "easy",
             "medium": "medium",
             "hard": "hard",
-            "insane": "insane"
+            "insane": "insane",
+            "custom": "custom"
           }
         }
       }
