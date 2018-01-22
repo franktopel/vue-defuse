@@ -574,7 +574,7 @@ export default {
         difficulty: this.selectedDifficulty,
         actions: this.actions,
         gamestate: this.gamestate,
-        name: this.playerName,
+        name: this.playerName === '' ? null : this.playerName,
         x: this.X,
         y: this.Y,
         bombcount: this.numberOfBombs,
