@@ -139,7 +139,6 @@
 </template>
 
 <script>
-import axios from 'axios'
 import MField from './Field.vue'
 const qs = require('qs')
 const messages = require('../i18n/translations.json')
@@ -174,6 +173,10 @@ export default {
     numberOfBombs: {
       type: Number,
       default: 0,
+    },
+    serverRecords: {
+      type: Object,
+      default: null
     }
   },
   data () {
@@ -201,7 +204,6 @@ export default {
       messages,
       localRecords: null,
       newLocalRecord: null,
-      serverRecords: null,
       playerName: null,
       recordsStoreUrl: {
         base: 'https://connexo.de/defuse/defuse-api',
@@ -251,16 +253,7 @@ export default {
   created () {
     this.buildMap()
     if (this.storesRecordsOnServer) {
-      axios.get(this.recordsStoreUrl.get, {
-        // headers: {'content-type': 'application/json'}
-      })
-        .then(response => {
-          this.serverRecords = response.data
-          console.log(response)
-        })
-        .catch(error => {
-          console.log(error)
-        })
+      this.$emit('getServerRecords')
     }
     this.localRecords = localRecords
     document.querySelector(':root').style.setProperty('--fieldwidth', `${this.setFieldWidth ? this.setFieldWidth : this.fieldWidth}px`)
@@ -580,13 +573,7 @@ export default {
         bombcount: this.numberOfBombs,
       }
 
-      axios.post(this.recordsStoreUrl.set, qs.stringify(payload))
-        .then(response => {
-          // this.playerName = '__user__'
-        })
-        .catch(function (error) {
-          console.error(error)
-        })
+      this.$emit('storeResultToServer', qs.stringify(payload))
     },
   },
   components: {
