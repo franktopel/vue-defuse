@@ -75,16 +75,39 @@
           <h3>{{ message('settings.label.headline') }}</h3>
           <div class="defuse-settings-custom">
             <label>{{ message('settings.label.playfieldWidth') }}
-              <input type="number" min="1" :max="100" step="1" v-model="setX" :placeholder="message('settings.label.playfieldWidth')"/>
+              <input type="number"
+                     @input="selectedDifficulty = 'custom'"
+                     min="1"
+                     :max="100"
+                     step="1"
+                     v-model="setX"
+                     :placeholder="message('settings.label.playfieldWidth')"/>
             </label>
             <label>{{ message('settings.label.playfieldHeight') }}
-              <input type="number" min="1" :max="100" step="1" v-model="setY" :placeholder="message('settings.label.playfieldHeight')"/>
+              <input type="number"
+                     @input="selectedDifficulty = 'custom'"
+                     min="1"
+                     :max="100"
+                     step="1"
+                     v-model="setY"
+                     :placeholder="message('settings.label.playfieldHeight')"/>
             </label>
             <label>{{ message('settings.label.bombCount') }}
-              <input type="number" min="0" :max="X * Y" step="1" v-model="setBombCount" :placeholder="message('settings.label.bombCount')"/>
+              <input type="number"
+                     @input="selectedDifficulty = 'custom'"
+                     min="0"
+                     :max="X * Y"
+                     step="1"
+                     v-model="setBombCount"
+                     :placeholder="message('settings.label.bombCount')"/>
             </label>
             <label>{{ message('settings.label.fieldSize') }}
-              <input type="number" min="20" max="60" step="1" v-model="setFieldWidth" :placeholder="message('settings.label.fieldSize')"/>
+              <input type="number"
+                     min="20"
+                     max="60"
+                     step="1"
+                     v-model="setFieldWidth"
+                     :placeholder="message('settings.label.fieldSize')"/>
             </label>
           </div>
         </div>
@@ -121,6 +144,7 @@ import MField from './Field.vue'
 const qs = require('qs')
 const messages = require('../i18n/translations.json')
 const difficulties = require('../config/difficulties.json')
+const difficultiesKeys = difficulties.map(difficulty => difficulty.name)
 const localRecords = JSON.parse(localStorage.getItem('defuse-records')) || JSON.parse('{"easy":null,"medium":null,"hard":null,"insane":null}')
 const Field = require('./Field.js')
 
@@ -173,6 +197,7 @@ export default {
       actions: 0,
       selectedDifficulty: 'easy',
       difficulties,
+      difficultiesKeys,
       messages,
       localRecords: null,
       newLocalRecord: null,
@@ -343,7 +368,7 @@ export default {
     buildMap () {
       this.clearMap()
       this.placeBombs()
-      this.gamestate = undefined
+      this.gamestate = null
     },
 
     placeBombs () {
@@ -504,6 +529,8 @@ export default {
       this.setBombCount = m
       if (d) {
         this.selectedDifficulty = d
+      } else {
+        this.selectedDifficulty = 'custom'
       }
     },
 
@@ -512,6 +539,9 @@ export default {
     },
 
     updateLocalRecords () {
+      if (!(this.selectedDifficulty in difficultiesKeys)) {
+        return
+      }
       if (!this.localRecords[this.selectedDifficulty] || this.localRecords[this.selectedDifficulty] > this.timePassed) {
         this.localRecords[this.selectedDifficulty] = this.timePassed
         localStorage.setItem('defuse-records', JSON.stringify(this.localRecords))
@@ -528,7 +558,7 @@ export default {
     },
 
     storeGameResults () {
-      if (!this.storesRecordsOnServer) {
+      if (!this.storesRecordsOnServer || !(this.selectedDifficulty in difficultiesKeys)) {
         return
       }
 
@@ -547,7 +577,7 @@ export default {
         name: this.playerName,
         x: this.X,
         y: this.Y,
-        bombCount: this.numberOfBombs,
+        bombcount: this.numberOfBombs,
       }
 
       axios.post(this.recordsStoreUrl.set, qs.stringify(payload))
