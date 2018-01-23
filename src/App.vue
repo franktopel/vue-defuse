@@ -1,6 +1,8 @@
 <template>
   <div id="defuse">
-    <small v-if="serverRecords">{{ serverRecords.totalGames }} games of Defuse played so far. {{ serverRecords.wonGames }} of those solved successfully, resolving to {{ (serverRecords.wonGames / serverRecords.totalGames * 100).toFixed(2) }}%.</small>
+    <div class="server-stats">
+      <small v-if="serverRecords">Total games played: {{ serverRecords.totalGames }}. Total Games won: {{ serverRecords.wonGames }}. Win percentage: {{ (serverRecords.wonGames / serverRecords.totalGames * 100).toFixed(2) }}%.</small>
+    </div>
     <Defuse
       :X="dimX"
       :Y="dimY"
@@ -66,6 +68,10 @@
 </script>
 
 <style lang="scss">
+  body {
+    margin: 0;
+    padding: 0;
+  }
   #defuse {
     font-family: 'Avenir', Helvetica, Arial, sans-serif;
     -webkit-font-smoothing: antialiased;

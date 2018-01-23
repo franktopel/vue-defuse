@@ -585,14 +585,14 @@ export default {
 <style lang="scss">
   .defuse {
     border: 2px solid #aaa;
-    background-color: #f0f0f0;
+    background-color: #999;
     display: inline-block;
-    position: relative;
     padding: 0 .3em .3em;
+    position: relative;
   }
 
   .game-title {
-    background-color: #333;
+    background-color: #666;
     color: #fff;
     font-size: 2em;
     margin: 0 -.15em;
@@ -634,6 +634,9 @@ export default {
 
   .row {
     display: flex;
+    &:last-child .field {
+      margin-bottom: 0;
+    }
   }
   .game-state {
     display: flex;
@@ -706,6 +709,7 @@ export default {
   }
 
   .playfield {
+    background-color: #f0f0f0;
     min-height: 378px;
     position: relative;
     -webkit-touch-callout: none;

@@ -35,17 +35,20 @@
   .field {
     align-items: center;
     background-color: #ddd;
-    border: 1px solid #aaa;
+    // border: 1px solid #aaa;
     border-collapse: collapse;
     color: #aaa;
     display: flex;
     font-size: var(--fieldwidth);
     height: var(--fieldwidth);
     justify-content: center;
-    margin: 0;
+    margin: 0 1px 1px 0;
     text-align: center;
     transition: all .1s linear;
     width: var(--fieldwidth);
+    &:last-child {
+      margin-right: 0;
+    }
   }
 
   .has-bomb {
