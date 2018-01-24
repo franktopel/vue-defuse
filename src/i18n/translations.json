@@ -53,7 +53,10 @@
       "server": {
         "askname": "Ihr Name für die Rangliste:",
         "placeholder": "Name",
-        "headline": "Bestzeiten auf diesem Server"
+        "headline": "Bestzeiten auf diesem Server",
+        "totalGamesPlayed": "Gesamtzahl Spiele: %1.",
+        "totalGamesWon": "Gewonnene Spiele: %1.",
+        "winPercentage": "Anteil gewonnene Spiele: %1%."
       }
     }
   },
@@ -109,7 +112,10 @@
       "server": {
         "askname": "Enter a name for the hall of fame:",
         "placeholder": "name",
-        "headline": "This server's highscores"
+        "headline": "This server's highscores",
+        "totalGamesPlayed": "Total games played: %1.",
+        "totalGamesWon": "Total games won: %1.",
+        "winPercentage": "Win percentage: %1%."
       }
     }
   }

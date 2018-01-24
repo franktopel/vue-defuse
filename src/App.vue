@@ -1,8 +1,5 @@
 <template>
   <div id="defuse">
-    <div class="server-stats">
-      <small v-if="serverRecords">Total games played: {{ serverRecords.totalGames }}. Total Games won: {{ serverRecords.wonGames }}. Win percentage: {{ (serverRecords.wonGames / serverRecords.totalGames * 100).toFixed(2) }}%.</small>
-    </div>
     <Defuse
       :X="dimX"
       :Y="dimY"
@@ -63,7 +60,7 @@
       },
     },
     created () {
-      // this.getServerRecords()
+      this.getServerRecords()
     }
   }
 </script>

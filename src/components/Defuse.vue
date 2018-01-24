@@ -148,6 +148,10 @@
         <div class="inner">
           <div class="defuse-scores">
             <h2>{{ message('records.server.headline') }}</h2>
+            <small>
+              {{ message('records.server.totalGamesPlayed', [serverRecords.totalGames]) }}
+              {{ message('records.server.totalGamesWon', [serverRecords.wonGames]) }}
+              {{ message('records.server.winPercentage', [((serverRecords.wonGames / serverRecords.totalGames) * 100).toFixed(2)]) }}</small>
             <div class="defuse-scores-lists">
               <section v-for="difficulty in difficultiesKeys">
                 <h3>{{ message(`settings.label.difficulty.level.${difficulty}`) }}</h3>
@@ -155,7 +159,7 @@
                   <li v-for="record in serverRecords.records[difficulty]">
                     <b class="record-name">{{ record.name }}</b>
                     <br />
-                    <span class="record-time">{{ record.seconds | formatTimer }}</span>
+                    <span class="record-time">⏱&nbsp;&nbsp;{{ record.seconds | formatTimer }}</span>
                     <br />
                     <small class="record-actions">({{ record.actions }} {{ message('stats.actions') }})</small>
                   </li>
