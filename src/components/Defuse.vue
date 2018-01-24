@@ -8,11 +8,15 @@
               @click="toggleSettings">⚙</button>
       <button type="button"
               class="defuse-instructions"
-              @click="toggleInstructions">❔</button>
+              @click="toggleInstructions">💡</button>
       <button type="button"
               class="defuse-personal-records"
               v-if="hasPersonalRecords"
               @click="togglePersonalRecords">⚜</button>
+      <button type="button"
+              class="defuse-server-records"
+              v-if="storesRecordsOnServer && serverRecords"
+              @click="toggleServerRecords">👑</button>
     </h2>
     <div class="game-state">
       <span class="bomb-mark-count"
@@ -31,6 +35,7 @@
               'game-over': gamestate === 'lost' || gamestate === 'won',
               'defuse-settings': showSettings,
               'defuse-personal-records': showPersonalRecords,
+              'defuse-server-records': showServerRecords,
               'defuse-instructions': showInstructions }">
 
       <!-- playfield creation -->
@@ -134,6 +139,32 @@
           <p v-for="difficulty in difficulties" v-if="localRecords[difficulty.name]">{{ message(`settings.label.difficulty.level.${difficulty.name}`) }}: {{ localRecords[difficulty.name] }}s</p>
         </div>
       </div>
+
+      <div class="playfield-overlay defuse-server-records" id="defuse-server-records" v-if="serverRecords">
+        <div class="language-switch">
+          <button type="button" v-for="lang in languages" :class="{ 'active-language': language === lang }" @click="setLanguage(lang)">{{ lang }}</button>
+        </div>
+        <button class="close" @click="toggleServerRecords">✖</button>
+        <div class="inner">
+          <div class="defuse-scores">
+            <h2>{{ message('records.server.headline') }}</h2>
+            <div class="defuse-scores-lists">
+              <section v-for="difficulty in difficultiesKeys">
+                <h3>{{ message(`settings.label.difficulty.level.${difficulty}`) }}</h3>
+                <ol>
+                  <li v-for="record in serverRecords.records[difficulty]">
+                    <b class="record-name">{{ record.name }}</b>
+                    <br />
+                    <span class="record-time">{{ record.seconds | formatTimer }}</span>
+                    <br />
+                    <small class="record-actions">({{ record.actions }} {{ message('stats.actions') }})</small>
+                  </li>
+                </ol>
+              </section>
+            </div>
+          </div>
+        </div>
+      </div>
     </div>
   </div>
 </template>
@@ -177,6 +208,10 @@ export default {
     serverRecords: {
       type: Object,
       default: null
+    },
+    storesRecordsOnServer: {
+      type: Boolean,
+      default: false
     }
   },
   data () {
@@ -192,6 +227,7 @@ export default {
       showSettings: false,
       showInstructions: false,
       showPersonalRecords: false,
+      showServerRecords: false,
       setX: this.X * 1,
       setY: this.Y * 1,
       setBombCount: this.numberOfBombs * 1,
@@ -210,7 +246,6 @@ export default {
         get: 'https://connexo.de/defuse/defuse-api/get.php',
         set: 'https://connexo.de/defuse/defuse-api/set.php'
       },
-      storesRecordsOnServer: true, // set this to false if you haven't created services on your server to store game results
     }
   },
   watch: {
@@ -310,7 +345,7 @@ export default {
       remainingSecs = seconds - hrs * (60 * 60)
       mins = ('0' + Math.floor(remainingSecs / 60)).substr(-2)
       secs = ('0' + remainingSecs % 60).substr(-2)
-      return `${days}:${hrs}:${mins}:${secs}`
+      return (days !== '00' ? `${days}:${hrs}:${mins}:${secs}` : (hrs !== '00' ? `${hrs}:${mins}:${secs}` : (mins.charAt(0) !== '0' ? `${mins}:${secs}` : `${mins.charAt(1)}:${secs}`)))
       // use this if all you wanna see is seconds filled up with zeros
       // if (seconds.toString().length < 4) {
       //   return ('0000' + seconds).substr(-4)
@@ -475,6 +510,7 @@ export default {
       if (!this.showSettings) {
         this.showInstructions = false
         this.showPersonalRecords = false
+        this.showServerRecords = false
       }
       this.showSettings = !this.showSettings
     },
@@ -483,6 +519,7 @@ export default {
       if (!this.showInstructions) {
         this.showSettings = false
         this.showPersonalRecords = false
+        this.showServerRecords = false
       }
       this.showInstructions = !this.showInstructions
     },
@@ -491,8 +528,18 @@ export default {
       if (!this.showPersonalRecords) {
         this.showSettings = false
         this.showInstructions = false
+        this.showServerRecords = false
       }
       this.showPersonalRecords = !this.showPersonalRecords
+    },
+
+    toggleServerRecords () {
+      if (!this.showServerRecords) {
+        this.showSettings = false
+        this.showInstructions = false
+        this.showPersonalRecords = false
+      }
+      this.showServerRecords = !this.showServerRecords
     },
 
     message (key, replacers) {
@@ -601,7 +648,8 @@ export default {
     text-align: center;
     .defuse-settings,
     .defuse-instructions,
-    .defuse-personal-records {
+    .defuse-personal-records,
+    .defuse-server-records {
       background-color: transparent;
       border: 0;
       bottom: 0;
@@ -618,7 +666,7 @@ export default {
       top: 0;
       transition: all .4s ease;
       &:hover {
-        transform: scale(1.75);
+        transform: scale(1.5);
       }
     }
     .defuse-settings {
@@ -629,6 +677,9 @@ export default {
     }
     .defuse-personal-records {
       left: .5em;
+    }
+    .defuse-server-records {
+      left: 2.5em;
     }
   }
 
@@ -886,6 +937,44 @@ export default {
     }
   }
 
+  .playfield.defuse-server-records {
+    z-index: 1000;
+    .playfield-overlay.defuse-server-records {
+      color: #fff;
+      text-align: center;
+      transform: scale(1);
+      transition-duration: .5s;
+      z-index: 9999;
+      .inner {
+        left: 50%;
+        max-width: 100%;
+        opacity: .95;
+        overflow-x: auto;
+        position: absolute;
+        padding: 0 1em 1em;
+        text-align: center;
+        top: 50%;
+        transform: translate(-50%, -50%);
+      }
+      .close {
+        appearance: none;
+        background-color: transparent;
+        border: 0;
+        color: #fff;
+        cursor: pointer;
+        font-size: 2em;
+        outline: 0;
+        position: absolute;
+        right: 0;
+        top: 0;
+        z-index: 2000;
+      }
+      h3 {
+        margin: 0;
+      }
+    }
+  }
+
   .language-switch {
     left: 1em;
     line-height: 1.5em;
@@ -909,6 +998,24 @@ export default {
       &.active-language {
         font-weight: bold;
         transform: scale(1.3)
+      }
+    }
+  }
+  .defuse-scores {
+    &-lists {
+      display: flex;
+      flex-direction: row;
+    }
+    h2 {
+      width: 100%;
+    }
+    section {
+      margin: 1em;
+    }
+    ol {
+      text-align: left;
+      > * {
+        white-space: nowrap;
       }
     }
   }

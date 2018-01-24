@@ -9,6 +9,7 @@
       :serverRecords="serverRecords"
       :numberOfBombs="Math.min((dimX * dimY), numberOfBombs)"
       :fieldWidth="fieldWidth"
+      :storesRecordsOnServer="storesRecordsOnServer"
       @getServerRecords="getServerRecords"
       @storeResultToServer="storeResultToServer"
     />
@@ -28,6 +29,7 @@
         fieldWidth: 60,
         numberOfBombs: 10,
         serverRecords: null,
+        storesRecordsOnServer: true,
         recordsStoreUrl: {
           base: 'https://connexo.de/defuse/defuse-api',
           get: 'https://connexo.de/defuse/defuse-api/get.php',
@@ -45,10 +47,9 @@
         })
           .then(response => {
             this.serverRecords = { ...response.data }
-            console.log(response.data)
           })
           .catch(error => {
-            console.log(error)
+            console.error(error)
           })
       },
       storeResultToServer (payload) {

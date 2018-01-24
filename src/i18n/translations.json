@@ -52,7 +52,8 @@
       },
       "server": {
         "askname": "Ihr Name für die Rangliste:",
-        "placeholder": "Name"
+        "placeholder": "Name",
+        "headline": "Bestzeiten auf diesem Server"
       }
     }
   },
@@ -107,7 +108,8 @@
       },
       "server": {
         "askname": "Enter a name for the hall of fame:",
-        "placeholder": "name"
+        "placeholder": "name",
+        "headline": "This server's highscores"
       }
     }
   }
