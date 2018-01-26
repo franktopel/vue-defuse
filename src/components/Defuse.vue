@@ -157,7 +157,7 @@
                 <h3>{{ message(`settings.label.difficulty.level.${difficulty}`) }}</h3>
                 <ol>
                   <li v-for="record in serverRecords.records[difficulty]">
-                    <b class="record-name">{{ record.name }}</b>
+                    <b class="record-name">{{ record.name.substr(0, 10) }}</b>
                     <br />
                     <span class="record-time">⏱&nbsp;&nbsp;{{ record.seconds | formatTimer }}</span>
                     <br />
@@ -306,6 +306,10 @@ export default {
       return Math.min((this.getX * this.getY), this.getBombCount ? parseInt(this.getBombCount) : this.numberOfBombs)
     },
 
+    fieldCount () {
+      return this.setX * this.setY
+    },
+
     getX () {
       return this.setX ? parseInt(this.setX) : this.X
     },
@@ -433,7 +437,7 @@ export default {
       field.isOpen = true
       if (field.hasBomb) {
         // fix game design flaw of losing on first open field
-        if (this.closedFieldCount === (this.X * this.Y) - 1) {
+        if (this.closedFieldCount === this.fieldCount - 1) {
           this.stopTimer()
           this.buildMap()
           this.startTimer()
