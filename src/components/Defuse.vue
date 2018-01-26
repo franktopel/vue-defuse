@@ -438,11 +438,12 @@ export default {
       if (field.hasBomb) {
         // fix game design flaw of losing on first open field
         if (this.closedFieldCount === this.fieldCount - 1) {
+          console.log('Saved!')
           this.stopTimer()
           this.buildMap()
           this.startTimer()
           this.$nextTick(() => {
-            document.querySelector(`[data-coordinates='${field.x}-${field.y}']`).dispatchEvent(new Event('click'))
+            document.querySelector(`.x${field.x}-y${field.y}`).dispatchEvent(new Event('click'))
           })
           return
         }

@@ -1,12 +1,12 @@
 <template>
   <div
     class="field"
-    :class="{
+    :class="[
+    {
       'has-bomb': field.hasBomb && field.isOpen,
       'is-open': field.isOpen,
-      'is-marked': field.isMarked
-    }"
-    :data-coordinates="coordinates"
+      'is-marked': field.isMarked,
+    }, coordinates]"
     v-touch:longtap="emitLongtap(field)">
     {{ field.numNeighbourBombs ? field.numNeighbourBombs : null }}
   </div>
@@ -18,7 +18,7 @@
     props: { field: Object, longtap: Function },
     computed: {
       coordinates () {
-        return `${this.field.x}-${this.field.y}`
+        return `x${this.field.x}-y${this.field.y}`
       }
     },
     methods: {
