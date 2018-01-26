@@ -67,6 +67,7 @@
 
 <style lang="scss">
   body {
+    background-color: #205060;
     margin: 0;
     padding: 0;
   }
@@ -77,7 +78,11 @@
     color: #2c3e50;
     padding: 1em;
     text-align: center;
+    .defuse {
+      box-shadow: 0 0 10px #000;
+    }
   }
+
 
   .fieldwidth {
     margin: 50px auto 0;
