@@ -6,6 +6,7 @@
       'is-open': field.isOpen,
       'is-marked': field.isMarked
     }"
+    :data-coordinates="coordinates"
     v-touch:longtap="emitLongtap(field)">
     {{ field.numNeighbourBombs ? field.numNeighbourBombs : null }}
   </div>
@@ -15,6 +16,11 @@
   export default {
     name: 'MField',
     props: { field: Object, longtap: Function },
+    computed: {
+      coordinates () {
+        return `${this.field.x}-${this.field.y}`
+      }
+    },
     methods: {
       emitLongtap (field) {
         return (event) => {

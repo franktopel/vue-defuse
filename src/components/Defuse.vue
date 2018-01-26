@@ -432,6 +432,16 @@ export default {
       }
       field.isOpen = true
       if (field.hasBomb) {
+        // fix game design flaw of losing on first open field
+        if (this.closedFieldCount === (this.X * this.Y) - 1) {
+          this.stopTimer()
+          this.buildMap()
+          this.startTimer()
+          this.$nextTick(() => {
+            document.querySelector(`[data-coordinates='${field.x}-${field.y}']`).dispatchEvent(new Event('click'))
+          })
+          return
+        }
         this.endGame()
       } else {
         let neighbourFields = this.getNeighbours(field)
