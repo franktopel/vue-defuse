@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div id="defuse">
     <vue-defuse
       :X="dimX"
       :Y="dimY"
@@ -18,7 +18,7 @@
   import VueDefuse from './components/VueDefuse'
 
   export default {
-    name: 'vue-defuse',
+    name: 'vue-defuse-app',
     data () {
       return {
         dimX: 10,
@@ -84,7 +84,6 @@
       box-shadow: 0 0 10px #000;
     }
   }
-
 
   .fieldwidth {
     margin: 50px auto 0;

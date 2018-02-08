@@ -9,7 +9,7 @@ Vue.use(Vue2TouchEvents)
 Vue.config.productionTip = false
 
 /* eslint-disable no-new */
-new Vue({
+window.Vue = new Vue({
   el: '#vue-defuse',
   components: { App },
   template: '<App/>',
