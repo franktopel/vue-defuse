@@ -174,13 +174,13 @@
 </template>
 
 <script>
-import MField from './Field.vue'
+import MField from './MField.vue'
 const qs = require('qs')
 const messages = require('../i18n/translations.json')
 const difficulties = require('../config/difficulties.json')
 const difficultiesKeys = difficulties.map(difficulty => difficulty.name)
 const localRecords = JSON.parse(localStorage.getItem('defuse-records')) || JSON.parse('{"easy":null,"medium":null,"hard":null,"insane":null}')
-const Field = require('./Field.js')
+const Field = require('./MField.js')
 
 // get default language from either localStorage or from the browser
 var userLang = localStorage.getItem('defuse-language') || navigator.language || navigator.userLanguage
@@ -191,7 +191,7 @@ if (Object.keys(messages).indexOf(userLang) === -1) {
 }
 
 export default {
-  name: 'Defuse',
+  name: 'VueDefuse',
   props: {
     X: {
       type: Number,
@@ -438,7 +438,6 @@ export default {
       if (field.hasBomb) {
         // fix game design flaw of losing on first open field
         if (this.closedFieldCount === this.fieldCount - 1) {
-          console.log('Saved!')
           this.stopTimer()
           this.buildMap()
           this.startTimer()

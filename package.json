@@ -1,8 +1,8 @@
 {
-  "name": "defuse",
-  "version": "1.1.0",
+  "name": "vue-defuse",
+  "version": "1.1.1",
   "description": "A minesweeper implentation in vue.js",
-  "author": "Frank Topel <info@connexo.de>, jeb <jeb@jeb.de>",
+  "author": "Frank Topel <info@connexo.de>, Jan Erik Bertram <jeb@jeb.de>",
   "private": true,
   "scripts": {
     "dev": "webpack-dev-server --inline --progress --config build/webpack.dev.conf.js",

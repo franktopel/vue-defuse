@@ -1,6 +1,6 @@
 <template>
-  <div id="defuse">
-    <Defuse
+  <div>
+    <vue-defuse
       :X="dimX"
       :Y="dimY"
       :serverRecords="serverRecords"
@@ -15,10 +15,10 @@
 
 <script>
   import axios from 'axios'
-  import Defuse from './components/Defuse'
+  import VueDefuse from './components/VueDefuse'
 
   export default {
-    name: 'defuse',
+    name: 'vue-defuse',
     data () {
       return {
         dimX: 10,
@@ -26,7 +26,7 @@
         fieldWidth: 60,
         numberOfBombs: 10,
         serverRecords: null,
-        storesRecordsOnServer: true,
+        storesRecordsOnServer: false,
         recordsStoreUrl: {
           base: 'https://connexo.de/defuse/defuse-api',
           get: 'https://connexo.de/defuse/defuse-api/get.php',
@@ -35,7 +35,7 @@
       }
     },
     components: {
-      Defuse,
+      VueDefuse,
     },
     methods: {
       getServerRecords () {
@@ -60,7 +60,9 @@
       },
     },
     created () {
-      this.getServerRecords()
+      if (this.storesRecordsOnServer) {
+        this.getServerRecords()
+      }
     }
   }
 </script>
