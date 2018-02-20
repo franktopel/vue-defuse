@@ -12,7 +12,7 @@
     "build-npm": "node build/build-npm.js"
   },
   "dependencies": {
-    "axios": "^0.17.1",
+    "axios": "^0.18.0",
     "es6-promise": "^4.2.2",
     "eslint-plugin-vue": "^4.2.0",
     "qs": "^6.5.1",
