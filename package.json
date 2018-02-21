@@ -17,7 +17,7 @@
     "eslint-plugin-vue": "^4.2.0",
     "qs": "^6.5.1",
     "vue": "^2.5.2",
-    "vue-slider-component": "^2.4.7",
+    "vue-slider-component": "^2.5.4",
     "vue2-touch-events": "^1.0.0"
   },
   "devDependencies": {
