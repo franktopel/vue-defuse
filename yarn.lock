@@ -6371,9 +6371,9 @@ vue-loader@^13.3.0:
     vue-style-loader "^3.0.0"
     vue-template-es2015-compiler "^1.6.0"
 
-vue-slider-component@^2.4.7:
-  version "2.4.8"
-  resolved "https://registry.yarnpkg.com/vue-slider-component/-/vue-slider-component-2.4.8.tgz#5edcd1a08924230acd85e18e427a8596352f1e27"
+vue-slider-component@^2.5.4:
+  version "2.5.4"
+  resolved "https://registry.yarnpkg.com/vue-slider-component/-/vue-slider-component-2.5.4.tgz#c58b5f18e9b3e4661033a136820e3b4736cc93c4"
 
 vue-style-loader@^3.0.0, vue-style-loader@^3.0.1:
   version "3.0.3"
