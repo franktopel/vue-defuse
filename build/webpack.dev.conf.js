@@ -50,6 +50,7 @@ const devWebpackConfig = merge(baseWebpackConfig, {
       template: 'index.html',
       inject: true
     }),
+    new webpack.LoaderOptionsPlugin({ options: {} }),
   ]
 })
 

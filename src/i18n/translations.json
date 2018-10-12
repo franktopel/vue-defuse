@@ -119,6 +119,65 @@
       }
     }
   },
+  "fr": {
+    "gamestate": {
+      "won": "Résolu en %1 secondes!",
+      "lost": "Vous avez perdu!",
+      "retry": "Rejouer",
+      "newGame": "Nouvelle partie"
+    },
+    "settings": {
+      "label": {
+        "headline": "Paramètres personnalisés",
+        "playfieldWidth": "Largeur",
+        "playfieldHeight": "Hauteur",
+        "fieldSize": "Largeur des cases (px)",
+        "bombCount": "Nombre de bombes",
+        "difficulty": {
+          "headline": "Niveaux de difficulté",
+          "level": {
+            "easy": "Facile",
+            "medium": "Moyen",
+            "hard": "Difficile",
+            "insane": "Impossible",
+            "custom": "Personnalisé"
+          }
+        }
+      }
+    },
+    "instructions": {
+      "headline": "Instructions",
+      "texts": [
+        "Defuse! est un jeu qui consiste à déminer des bombes qui sont placées de manière aléatoire sur une aire de jeu rectangulaire.",
+        "L'aire de jeu est faite d'un nombre de lignes (Y) et colonnes (X).",
+        "Elle consiste en cases individuelle X * Y. Chaque zone peut potentiellement avoir une bombe 💣.",
+        "Au début, toutes les cases sont masquées. Vous pouvez explorer une case en cliquand dessus.",
+        "Si la case que vous explorez contient une bombe, elle explose et vous perdez la partie.",
+        "Si vous êtes sur qu'une case en particulier cache une bombe, vous pouvez la marquer avec un drapeau 🚩 en cliquant avec le bouton droit de la souris.",
+        "Si vous explorez une case qui n'a pas de bombe, il va afficher le nombre de bombes sur les cases adjacentes.",
+        "Si aucune des cases adjacentes ne contient de bombe, toutes les cases adjacentes seront dévoilées.",
+        "La partie est finie dès que tous les champs ne contenant pas de mines ont étés dévoilés."
+      ]
+    },
+    "stats": {
+      "actions": "Actions",
+      "apm": "APM"
+    },
+    "records": {
+      "local": {
+        "newRecord": "Nouveau record personnel pour la difficulté '%1'! Résolu en juste %2 secondes!",
+        "records": "Vos records personnels"
+      },
+      "server": {
+        "askname": "Entrez un nom pour le classement général :",
+        "placeholder": "nom",
+        "headline": "Les records",
+        "totalGamesPlayed": "Nombre total de parties jouées : %1.",
+        "totalGamesWon": "Nombre total de parties gagnées : %1.",
+        "winPercentage": "Pourcentage de parties gagnées : %1%."
+      }
+    }
+  },
   "ko": {
     "gamestate": {
       "won": "%1 초 만에 해결!",
