@@ -15,7 +15,7 @@
     "axios": "^0.18.0",
     "es6-promise": "^4.2.4",
     "eslint-plugin-vue": "^4.5.0",
-    "qs": "^6.5.1",
+    "qs": "^6.5.2",
     "vue": "^2.5.2",
     "vue2-touch-events": "^1.0.0"
   },
