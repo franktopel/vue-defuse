@@ -59,7 +59,7 @@
     "shelljs": "^0.8.2",
     "ssri": "^6.0.1",
     "tapable": "^1.1.0",
-    "uglifyjs-webpack-plugin": "^1.1.1",
+    "uglifyjs-webpack-plugin": "^2.0.1",
     "url-loader": "^1.0.1",
     "vue-loader": "^14.2.1",
     "vue-style-loader": "^4.1.2",
