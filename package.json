@@ -16,7 +16,7 @@
     "es6-promise": "^4.2.4",
     "eslint-plugin-vue": "^4.5.0",
     "qs": "^6.5.1",
-    "vue": "^2.5.2",
+    "vue": "^2.5.17",
     "vue2-touch-events": "^1.0.0"
   },
   "devDependencies": {
