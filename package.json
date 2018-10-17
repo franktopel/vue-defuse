@@ -12,6 +12,7 @@
     "build-npm": "node build/build-npm.js"
   },
   "dependencies": {
+    "@babel/runtime": "^7.1.2",
     "axios": "^0.18.0",
     "es6-promise": "^4.2.4",
     "eslint-plugin-vue": "^4.5.0",
@@ -20,16 +21,16 @@
     "vue2-touch-events": "^1.0.0"
   },
   "devDependencies": {
+    "@babel/cli": "^7.1.2",
+    "@babel/core": "^7.1.2",
+    "@babel/plugin-syntax-jsx": "^7.0.0",
+    "@babel/plugin-transform-runtime": "^7.1.0",
+    "@babel/preset-env": "^7.1.0",
     "autoprefixer": "^9.1.5",
-    "babel-core": "^6.26.3",
     "babel-eslint": "^10.0.1",
     "babel-helper-vue-jsx-merge-props": "^2.0.3",
     "babel-loader": "^8.0.4",
-    "babel-plugin-syntax-jsx": "^6.18.0",
-    "babel-plugin-transform-runtime": "^6.22.0",
-    "babel-plugin-transform-vue-jsx": "^3.7.0",
-    "babel-preset-env": "^1.7.0",
-    "babel-preset-stage-2": "^6.22.0",
+    "babel-plugin-transform-vue-jsx": "^4.0.1",
     "chalk": "^2.4.1",
     "copy-webpack-plugin": "^4.5.3",
     "css-loader": "^1.0.0",
@@ -71,8 +72,8 @@
     "webpack-merge": "^4.1.2"
   },
   "engines": {
-    "node": ">= 4.0.0",
-    "npm": ">= 3.0.0"
+    "node": ">= 8.0.0",
+    "npm": ">= 5.4.1"
   },
   "browserslist": [
     "> 1%",
