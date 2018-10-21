@@ -1,6 +1,6 @@
 # defuse
 
-> An implentation of the classical minesweeper game in vue.js
+> An implementation of the classical minesweeper game in vue.js
 
 Demo: http://connexo.de/defuse/
 
