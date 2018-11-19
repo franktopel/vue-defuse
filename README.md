@@ -2,7 +2,7 @@
 
 > An implementation of the classical minesweeper game in vue.js
 
-Demo: http://connexo.de/defuse/
+Demo: https://connexo.de/defuse/
 
 Screenshot: 
 ![Defuse game](screenshot.png)
