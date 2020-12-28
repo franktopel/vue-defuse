@@ -15,7 +15,7 @@
     "@babel/runtime": "^7.1.2",
     "axios": "^0.18.1",
     "es6-promise": "^4.2.5",
-    "eslint-plugin-vue": "^4.7.1",
+    "eslint-plugin-vue": "^7.4.0",
     "qs": "^6.5.2",
     "vue": "^2.5.17",
     "vue2-touch-events": "^1.0.0"
