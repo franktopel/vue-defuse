@@ -1,0 +1,37 @@
+version: 2
+updates:
+- package-ecosystem: npm
+  directory: "/"
+  schedule:
+    interval: weekly
+    time: "04:00"
+  open-pull-requests-limit: 10
+  ignore:
+  - dependency-name: y18n
+    versions:
+    - 4.0.1
+  - dependency-name: eslint-plugin-vue
+    versions:
+    - 7.5.0
+    - 7.6.0
+    - 7.7.0
+    - 7.8.0
+  - dependency-name: webpack-cli
+    versions:
+    - 4.4.0
+    - 4.5.0
+  - dependency-name: webpack-bundle-analyzer
+    versions:
+    - 4.4.0
+  - dependency-name: node-notifier
+    versions:
+    - 9.0.0
+  - dependency-name: semver
+    versions:
+    - 7.3.4
+  - dependency-name: "@babel/plugin-syntax-jsx"
+    versions:
+    - 7.12.1
+  - dependency-name: chalk
+    versions:
+    - 4.1.0
