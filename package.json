@@ -12,7 +12,7 @@
     "build-npm": "node build/build-npm.js"
   },
   "dependencies": {
-    "@babel/runtime": "^7.1.2",
+    "@babel/runtime": "^7.14.6",
     "axios": "^0.21.1",
     "es6-promise": "^4.2.8",
     "eslint-plugin-vue": "^4.7.1",
@@ -26,7 +26,7 @@
     "@babel/plugin-syntax-jsx": "^7.14.5",
     "@babel/plugin-transform-runtime": "^7.1.0",
     "@babel/preset-env": "^7.14.5",
-    "autoprefixer": "^9.8.5",
+    "autoprefixer": "^9.8.6",
     "babel-eslint": "^10.1.0",
     "babel-helper-vue-jsx-merge-props": "^2.0.3",
     "babel-loader": "^8.0.4",
@@ -62,7 +62,7 @@
     "tapable": "^2.0.0",
     "uglifyjs-webpack-plugin": "^2.0.1",
     "url-loader": "^4.1.1",
-    "vue-loader": "^15.9.3",
+    "vue-loader": "^15.9.7",
     "vue-style-loader": "^4.1.2",
     "vue-template-compiler": "^2.6.12",
     "webpack": "^4.46.0",
